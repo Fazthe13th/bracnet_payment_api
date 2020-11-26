@@ -6,7 +6,8 @@ This a basic Django restframework implementation for Bracnet limited. We have im
 3. Go to the root folder where Dockerfile is located and run `docker build .`
 4. then run `docker-compose build`
 5. Finally, run `docker-compose up`
-Note: if app container starts before db than just rerun 3rd command.
+Note 1: if app container starts before db than just rerun 3rd command.
+Note 2: Change the .env.sample to .env and set the env variables.
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
