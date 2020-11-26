@@ -8,6 +8,7 @@ This a basic Django restframework implementation for Bracnet limited. We have im
 5. Finally, run `docker-compose up`
 Note 1: if app container starts before db than just rerun 3rd command.
 Note 2: Change the .env.sample to .env and set the env variables.
+Note 3: Add the ip/host in settings.py. Example: ALLOWED_HOSTS = ['202.0.0.1','127.0.0.1']
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
