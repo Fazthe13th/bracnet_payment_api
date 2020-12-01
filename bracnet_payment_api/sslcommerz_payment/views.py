@@ -14,14 +14,13 @@ import os
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
     serializer_class = SslcommerzPaymentInitializationSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentInitializationModel.objects.all()
     sslc_tran_uuid = uuid.uuid4()
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
-        serializer = SslcommerzPaymentInitializationSerializer(
-            data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
             post_body = {
@@ -62,7 +61,7 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
 
 class SSLCommerzIPNView(GenericAPIView):
     serializer_class = SslcommerzIPNSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -76,7 +75,7 @@ class SSLCommerzIPNView(GenericAPIView):
 
 class SSLCommerzValidateView(ListCreateAPIView):
     serializer_class = SslcommerzValidationSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
