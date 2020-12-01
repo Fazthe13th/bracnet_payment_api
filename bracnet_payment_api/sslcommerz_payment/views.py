@@ -67,6 +67,7 @@ class SSLCommerzIPNView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print(self.request.data)
         try:
             validate_url = reverse(
                 'sslc_payment_validate', args=[json.dumps(self.request.data)])
