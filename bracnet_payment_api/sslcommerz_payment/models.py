@@ -47,8 +47,14 @@ class SslcommerzPaymentInitializationModel(models.Model):
 
 
 class SslcommerzPaymentValidateModel(models.Model):
-    status_choices = ['VALID', 'FAILED', 'CANCELLED', 'UNATTEMPTED', 'EXPIRED']
-    card_brand_choices = ['VISA', 'MASTER', 'AMEX', 'IB', 'MOBILE BANKING']
+    STATUS_CHOICES = {
+        ('VALID', 'VALID'), ('FAILED', 'FAILED'), ('CANCELLED',
+                                                   'CANCELLED'), ('UNATTEMPTED', 'UNATTEMPTED'), ('EXPIRED', 'EXPIRED')
+    }
+    CARD_BRAND_CHOICES = {
+        ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
+                                                 'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
+    }
     tran_id = models.UUIDField(unique=True, db_index=True)
     val_id = models.CharField(unique=True, db_index=True, max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -56,16 +62,16 @@ class SslcommerzPaymentValidateModel(models.Model):
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
     card_no = models.CharField(max_length=16)
     bank_tran_id = models.CharField(max_length=255)
-    status = models.CharField(choices=status_choices)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=50)
     tran_date = models.DateTimeField()
-    currency = models.CharField()
+    currency = models.CharField(max_length=3)
     card_issuer = models.CharField(max_length=50)
-    card_brand = models.CharField(choices=card_brand_choices)
+    card_brand = models.CharField(choices=CARD_BRAND_CHOICES, max_length=50)
     card_issuer_country = models.CharField(max_length=50)
     card_issuer_country_code = models.CharField(max_length=2)
     store_id = models.CharField(max_length=50)
     verify_sign = models.CharField(max_length=255)
-    verify_key = models.CharField()
+    verify_key = models.CharField(max_length=255)
     currency_type = models.CharField(max_length=3)
     currency_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
