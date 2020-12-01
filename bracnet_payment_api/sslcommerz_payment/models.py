@@ -57,7 +57,7 @@ class SslcommerzPaymentValidateModel(models.Model):
     card_no = models.CharField(max_length=16)
     bank_tran_id = models.CharField(max_length=255)
     status = models.CharField(choices=status_choices)
-    tran_date = models.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    tran_date = models.DateTimeField()
     currency = models.CharField(min_length=3)
     card_issuer = models.CharField(max_length=50)
     card_brand = models.CharField(choices=card_brand_choices)
