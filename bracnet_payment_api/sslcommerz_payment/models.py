@@ -3,7 +3,7 @@ import uuid
 # Create your models here.
 
 
-class SslcommerzPaymentInitialization(models.Model):
+class SslcommerzPaymentInitializationModel(models.Model):
     SHIPPING_METHOD_OPTIONS = {
         ('NO', 'NO'),
         ('YES', 'YES'),
@@ -44,3 +44,30 @@ class SslcommerzPaymentInitialization(models.Model):
 
     def __str__(self):
         return "Transaction id "+str(self.tran_id) + " and Customer name "+str(self.cus_name)
+
+
+class SslcommerzPaymentValidateModel(models.Model):
+    status_choices = ['VALID', 'FAILED', 'CANCELLED', 'UNATTEMPTED', 'EXPIRED']
+    card_brand_choices = ['VISA', 'MASTER', 'AMEX', 'IB', 'MOBILE BANKING']
+    tran_id = models.UUIDField(read_only=True)
+    val_id = models.CharField(read_only=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    card_type = models.CharField(max_length=255)
+    store_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    card_no = models.CharField(max_length=16)
+    bank_tran_id = models.CharField(max_length=255)
+    status = models.CharField(choices=status_choices)
+    tran_date = models.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    currency = models.CharField(min_length=3)
+    card_issuer = models.CharField(max_length=50)
+    card_brand = models.CharField(choices=card_brand_choices)
+    card_issuer_country = models.CharField(max_length=50)
+    card_issuer_country_code = models.CharField(max_length=2)
+    store_id = models.CharField(max_length=50)
+    verify_sign = models.CharField(max_length=255)
+    verify_key = models.CharField()
+    currency_type = models.CharField(max_length=3)
+    currency_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return "Transaction id "+str(self.tran_id) + " has status "+str(self.status)
