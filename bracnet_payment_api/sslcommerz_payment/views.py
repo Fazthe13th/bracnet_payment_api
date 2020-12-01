@@ -1,4 +1,4 @@
-from .models import SslcommerzPaymentInitializationModel
+from .models import SslcommerzPaymentInitializationModel, SslcommerzPaymentValidateModel
 from .serializers import SslcommerzPaymentInitializationSerializer, SslcommerzIPNSerializer, SslcommerzValidationSerializer
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from rest_framework.reverse import reverse
 from . SslcommerzAPICall.sslcommerz import SSLCommerzfunc
 import uuid
 import os
+import json
 
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
@@ -67,40 +68,53 @@ class SSLCommerzIPNView(GenericAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            validate_url = reverse('sslc_payment_validate', request=request)
+            validate_url = reverse(
+                'sslc_payment_validate', args=[json.dumps(self.request.data)])
             return redirect(validate_url)
         except Exception:
             return Response({'msg': 'SSLCommarz IPN response parsing failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class SSLCommerzValidateView(ListCreateAPIView):
+class SSLCommerzValidateView(GenericAPIView):
     serializer_class = SslcommerzValidationSerializer
     # permission_classes = (permissions.IsAuthenticated,)
     SSLCommerz = SSLCommerzfunc()
+    queryset = SslcommerzPaymentValidateModel.objects.all()
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+    def get(self, request, validation_data):
+        converted_validation_data = json.loads(validation_data)
+        serializer = self.serializer_class(data=converted_validation_data)
         serializer.is_valid(raise_exception=True)
-        # post_body = {
-        #     'tran_id': self.request.data['tran_id'],
-        #     'val_id': self.request.data['val_id'],
-        #     'amount': self.request.data['amount'],
-        #     'card_type': self.request.data['card_type'],
-        #     'store_amount': self.request.data['store_amount'],
-        #     'card_no': self.request.data['card_no'],
-        #     'bank_tran_id': self.request.data['bank_tran_id'],
-        #     'status': self.request.data['status'],
-        #     'tran_date': self.request.data['tran_date'],
-        #     'currency': self.request.data['currency'],
-        #     'card_issuer': self.request.data['card_issuer'],
-        #     'card_brand': self.request.data['card_brand'],
-        #     'card_issuer_country': self.request.data['card_issuer_country'],
-        #     'card_issuer_country_code': self.request.data['card_issuer_country_code'],
-        #     'store_id': self.request.data['store_id'],
-        #     'verify_sign': self.request.data['verify_sign'],
-        #     'verify_key': self.request.data['verify_key'],
-        #     'currency_type': self.request.data['currency_type'],
-        #     'currency_amount': self.request.data['currency_amount']
-        # }
-        # self.ssl_validation_res = self.SSLCommerz.validate_session(
-        #     post_body)
+        try:
+            post_body = {
+                'tran_id': converted_validation_data['tran_id'],
+                'val_id': converted_validation_data['val_id'],
+                'amount': converted_validation_data['amount'],
+                'card_type': converted_validation_data['card_type'],
+                'store_amount': converted_validation_data['store_amount'],
+                'card_no': converted_validation_data['card_no'],
+                'bank_tran_id': converted_validation_data['bank_tran_id'],
+                'status': converted_validation_data['status'],
+                'tran_date': converted_validation_data['tran_date'],
+                'currency': converted_validation_data['currency'],
+                'card_issuer': converted_validation_data['card_issuer'],
+                'card_brand': converted_validation_data['card_brand'],
+                'card_issuer_country': converted_validation_data['card_issuer_country'],
+                'card_issuer_country_code': converted_validation_data['card_issuer_country_code'],
+                'store_id': converted_validation_data['store_id'],
+                'verify_sign': converted_validation_data['verify_sign'],
+                'verify_key': converted_validation_data['verify_key'],
+                'currency_type': converted_validation_data['currency_type'],
+                'currency_amount': converted_validation_data['currency_amount']
+            }
+            # print(post_body)
+            self.ssl_validation_res = self.SSLCommerz.validate_session(
+                post_body)
+            try:
+                serializer.save()
+            except DatabaseError:
+                raise DatabaseError(
+                    'Database crud has failed. Contact developer.')
+            return None
+        except Exception:
+            raise Exception('Validation with SSLCommerz validation api failed')

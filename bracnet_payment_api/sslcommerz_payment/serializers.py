@@ -23,8 +23,8 @@ class SslcommerzIPNSerializer(serializers.Serializer):
         ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
                                                  'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
     }
-    tran_id = serializers.UUIDField(read_only=True)
-    val_id = serializers.CharField(read_only=True)
+    tran_id = serializers.UUIDField()
+    val_id = serializers.CharField()
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     card_type = serializers.CharField(max_length=255)
     store_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
@@ -50,14 +50,28 @@ class SslcommerzIPNSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         tran_id = attrs.get('tran_id', None)
-        status = attrs.get('status', None)
         amount = attrs.get('amount', None)
         currency_type = attrs.get('currency_type', None)
-        currency_amount = attrs.get('currency_amount', None)
-        session_data = SslcommerzPaymentInitializationModel.objects.filter(
+        # currency_amount = attrs.get('currency_amount', None)
+        if not tran_id:
+            raise serializers.ValidationError('Transaction ID is empty')
+        if not amount:
+            raise serializers.ValidationError('Amount field is empty')
+        if not currency_type:
+            raise serializers.ValidationError('Currency Type field is empty')
+        # if not currency_amount:
+        #     raise serializers.ValidationError('Currency amount field is empty')
+        session_data = SslcommerzPaymentInitializationModel.objects.get(
             tran_id=tran_id)
-        import pdb
-        pdb.set_trace()
+        if not session_data:
+            raise serializers.ValidationError(
+                'SSLCommerz session was never created for this request')
+        if session_data.total_amount != amount:
+            raise serializers.ValidationError(
+                'Amount does not match with session creation amount')
+        if session_data.currency != currency_type:
+            raise serializers.ValidationError(
+                'Currency type did not match with session currency type')
         return attrs
 
 

@@ -1,5 +1,4 @@
 from django.db import models
-import uuid
 # Create your models here.
 
 
@@ -42,6 +41,9 @@ class SslcommerzPaymentInitializationModel(models.Model):
     status = models.CharField(max_length=15, default=None)
     failed_reason = models.TextField(max_length=500, default=None)
 
+    class Meta:
+        ordering: ['-payment_date']
+
     def __str__(self):
         return "Transaction id "+str(self.tran_id) + " and Customer name "+str(self.cus_name)
 
@@ -74,6 +76,9 @@ class SslcommerzPaymentValidateModel(models.Model):
     verify_key = models.CharField(max_length=255)
     currency_type = models.CharField(max_length=3)
     currency_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        ordering: ['-tran_date']
 
     def __str__(self):
         return "Transaction id "+str(self.tran_id) + " has status "+str(self.status)
