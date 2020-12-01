@@ -50,7 +50,7 @@ class SslcommerzPaymentValidateModel(models.Model):
     status_choices = ['VALID', 'FAILED', 'CANCELLED', 'UNATTEMPTED', 'EXPIRED']
     card_brand_choices = ['VISA', 'MASTER', 'AMEX', 'IB', 'MOBILE BANKING']
     tran_id = models.UUIDField(unique=True, db_index=True)
-    val_id = models.CharField(unique=True, db_index=True)
+    val_id = models.CharField(unique=True, db_index=True, max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     card_type = models.CharField(max_length=255)
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
