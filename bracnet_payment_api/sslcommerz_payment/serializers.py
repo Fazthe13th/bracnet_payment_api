@@ -15,8 +15,14 @@ class SslcommerzPaymentInitializationSerializer(serializers.ModelSerializer):
 
 
 class SslcommerzIPNSerializer(serializers.Serializer):
-    status_choices = ['VALID', 'FAILED', 'CANCELLED', 'UNATTEMPTED', 'EXPIRED']
-    card_brand_choices = ['VISA', 'MASTER', 'AMEX', 'IB', 'MOBILE BANKING']
+    STATUS_CHOICES = {
+        ('VALID', 'VALID'), ('FAILED', 'FAILED'), ('CANCELLED',
+                                                   'CANCELLED'), ('UNATTEMPTED', 'UNATTEMPTED'), ('EXPIRED', 'EXPIRED')
+    }
+    CARD_BRAND_CHOICES = {
+        ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
+                                                 'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
+    }
     tran_id = serializers.UUIDField(read_only=True)
     val_id = serializers.CharField(read_only=True)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
@@ -24,11 +30,11 @@ class SslcommerzIPNSerializer(serializers.Serializer):
     store_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     card_no = serializers.CharField(max_length=16)
     bank_tran_id = serializers.CharField(max_length=255)
-    status = serializers.ChoiceField(choices=status_choices)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES)
     tran_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     currency = serializers.CharField(min_length=3)
     card_issuer = serializers.CharField(max_length=50)
-    card_brand = serializers.ChoiceField(choices=card_brand_choices)
+    card_brand = serializers.ChoiceField(choices=CARD_BRAND_CHOICES)
     card_issuer_country = serializers.CharField(max_length=50)
     card_issuer_country_code = serializers.CharField(max_length=2)
     store_id = serializers.CharField(max_length=50)
