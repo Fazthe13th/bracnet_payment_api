@@ -83,6 +83,7 @@ class SSLCommerzValidateView(GenericAPIView):
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
     def get(self, request, validation_data):
+        print(validation_data)
         converted_validation_data = json.loads(validation_data)
         serializer = self.serializer_class(data=converted_validation_data)
         serializer.is_valid(raise_exception=True)
