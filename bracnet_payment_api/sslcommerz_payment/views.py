@@ -7,10 +7,18 @@ from rest_framework.generics import ListCreateAPIView, GenericAPIView
 from django.db import DatabaseError, DataError
 from django.shortcuts import redirect
 from rest_framework.reverse import reverse
+from django.http import HttpResponsePermanentRedirect
 from . SslcommerzAPICall.sslcommerz import SSLCommerzfunc
 import uuid
 import os
 import json
+
+
+# Custom redect to redict to HTTP sites
+
+
+class CustomRedirect(HttpResponsePermanentRedirect):
+    allowed_schemes = ['http', 'https']
 
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
@@ -71,7 +79,7 @@ class SSLCommerzIPNView(GenericAPIView):
             validate_url = reverse(
                 'sslc_payment_validate', args=[json.dumps(self.request.data)], request=request)
             print(validate_url)
-            return redirect(validate_url)
+            return CustomRedirect(validate_url)
         except Exception:
             return Response({'msg': 'SSLCommarz IPN response parsing failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
