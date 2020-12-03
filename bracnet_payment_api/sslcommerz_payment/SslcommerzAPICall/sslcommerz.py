@@ -14,8 +14,8 @@ class SSLCommerzfunc():
         response = self.sslcommez.createSession(post_body)
         return response
 
-    def validate_session(self, post_body):
-        response = self.sslcommez.hash_validate_ipn(post_body)
+    def validate_session(self, val_id):
+        response = self.sslcommez.validationTransactionOrder(val_id)
         return response
 
 

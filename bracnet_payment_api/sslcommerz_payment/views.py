@@ -100,35 +100,14 @@ class SSLCommerzValidateView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         print(converted_validation_data)
         try:
-            post_body = {
-                'tran_id': converted_validation_data['tran_id'],
-                'val_id': converted_validation_data['val_id'],
-                'amount': converted_validation_data['amount'],
-                'card_type': converted_validation_data['card_type'],
-                'store_amount': converted_validation_data['store_amount'],
-                'card_no': converted_validation_data['card_no'],
-                'bank_tran_id': converted_validation_data['bank_tran_id'],
-                'status': converted_validation_data['status'],
-                'tran_date': converted_validation_data['tran_date'],
-                'currency': converted_validation_data['currency'],
-                'card_issuer': converted_validation_data['card_issuer'],
-                'card_brand': converted_validation_data['card_brand'],
-                'card_issuer_country': converted_validation_data['card_issuer_country'],
-                'card_issuer_country_code': converted_validation_data['card_issuer_country_code'],
-                'store_id': converted_validation_data['store_id'],
-                'verify_sign': converted_validation_data['verify_sign'],
-                'verify_key': converted_validation_data['verify_key'],
-                'currency_type': converted_validation_data['currency_type'],
-                'currency_amount': converted_validation_data['currency_amount']
-            }
-            # print(post_body)
             self.ssl_validation_res = self.SSLCommerz.validate_session(
-                post_body)
-            try:
-                serializer.save()
-            except DatabaseError:
-                raise DatabaseError(
-                    'Database crud has failed. Contact developer.')
+                converted_validation_data['val_id'])
+            print(self.ssl_validation_res)
+            # try:
+            #     serializer.save()
+            # except DatabaseError:
+            #     raise DatabaseError(
+            #         'Database crud has failed. Contact developer.')
             return None
         except Exception:
             raise Exception('Validation with SSLCommerz validation api failed')
