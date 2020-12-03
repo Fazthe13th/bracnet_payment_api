@@ -90,10 +90,6 @@ class SSLCommerzValidateView(GenericAPIView):
     SSLCommerz = SSLCommerzfunc()
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
-    def post(self, request):
-        print('This is post')
-        return None
-
     def get(self, request, validation_data):
         converted_validation_data = json.loads(validation_data)
         serializer = self.serializer_class(data=converted_validation_data)
@@ -108,6 +104,6 @@ class SSLCommerzValidateView(GenericAPIView):
             # except DatabaseError:
             #     raise DatabaseError(
             #         'Database crud has failed. Contact developer.')
-            return None
+            return Response({'msg': 'Validated'})
         except Exception:
             raise Exception('Validation with SSLCommerz validation api failed')

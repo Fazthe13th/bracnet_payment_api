@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import SslcommerzPaymentInitializationModel, SslcommerzPaymentValidateModel
+from django.shortcuts import get_object_or_404
 
 
 class SslcommerzPaymentInitializationSerializer(serializers.ModelSerializer):
@@ -61,8 +62,8 @@ class SslcommerzIPNSerializer(serializers.Serializer):
             raise serializers.ValidationError('Currency Type field is empty')
         # if not currency_amount:
         #     raise serializers.ValidationError('Currency amount field is empty')
-        session_data = SslcommerzPaymentInitializationModel.objects.get(
-            tran_id=tran_id)
+        session_data = get_object_or_404(
+            SslcommerzPaymentInitializationModel, tran_id=tran_id)
         if not session_data:
             raise serializers.ValidationError(
                 'SSLCommerz session was never created for this request')
