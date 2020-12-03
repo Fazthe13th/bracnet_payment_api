@@ -60,14 +60,15 @@ class SslcommerzPaymentValidateModel(models.Model):
     tran_id = models.UUIDField(unique=True, db_index=True)
     val_id = models.CharField(unique=True, db_index=True, max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    card_type = models.CharField(max_length=255, null=True)
+    card_type = models.CharField(max_length=255, null=True, default=None)
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    card_no = models.CharField(max_length=16)
-    bank_tran_id = models.CharField(max_length=255)
-    status = models.CharField(choices=STATUS_CHOICES, max_length=50)
+    card_no = models.CharField(max_length=16, null=True, default=None)
+    bank_tran_id = models.CharField(max_length=255, null=True, default=None)
+    status = models.CharField(choices=STATUS_CHOICES,
+                              max_length=50, null=True, default=None)
     tran_date = models.DateTimeField(default=now())
-    currency = models.CharField(max_length=3, null=True)
-    card_issuer = models.CharField(max_length=50, null=True)
+    currency = models.CharField(max_length=3, null=True, default=None)
+    card_issuer = models.CharField(max_length=50, null=True, default=None)
     card_brand = models.CharField(choices=CARD_BRAND_CHOICES, max_length=50)
     card_issuer_country = models.CharField(max_length=50, default='Bangladesh')
     card_issuer_country_code = models.CharField(max_length=2, default='BD')
@@ -75,24 +76,23 @@ class SslcommerzPaymentValidateModel(models.Model):
     currency_amount = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
     currency_rate = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0.00)
+        max_digits=10, decimal_places=5, default=0.00)
     base_fair = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
     emi_instalment = models.CharField(max_length=3, default=0)
     emi_amount = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
-    emi_description = models.TextField(default=None)
-    emi_issuer = models.CharField(max_length=100, default=None)
-    account_details = models.CharField(max_length=100, default=None)
-    risk_title = models.CharField(max_length=50, default=None)
-    risk_level = models.CharField(max_length=3, default=None)
+    emi_description = models.TextField(default='no description')
+    emi_issuer = models.CharField(max_length=100, null=True, default=None)
+    risk_title = models.CharField(max_length=50, null=True, default=None)
+    risk_level = models.CharField(max_length=3, null=True, default=None)
     validated_on = models.DateTimeField(default=now())
-    card_ref_id = models.CharField(max_length=255, null=True)
+    card_ref_id = models.CharField(max_length=255, null=True, default=None)
     discount_percentage = models.DecimalField(
-        max_digits=3, decimal_places=2, null=True)
+        max_digits=10, decimal_places=2, null=True, default=None)
     discount_amount = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True)
-    discount_remarks = models.TextField(null=True)
+        max_digits=10, decimal_places=2, null=True, default=None)
+    discount_remarks = models.TextField(null=True, default=None)
 
     class Meta:
         ordering: ['-tran_date']

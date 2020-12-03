@@ -79,9 +79,38 @@ class SslcommerzIPNSerializer(serializers.Serializer):
 class SslcommerzValidationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SslcommerzPaymentValidateModel
-        fields = ['tran_id', 'val_id', 'amount', 'card_type', 'store_amount', 'card_no', 'bank_tran_id',
-                  'status', 'tran_date', 'currency', 'card_issuer', 'card_brand', 'card_issuer_country', 'card_issuer_country_code',
-                  'currency_type', 'currency_amount']
+        fields = '__all__'
 
     def validate(self, attrs):
         return attrs
+
+    # 'tran_id'
+    # 'val_id'
+    # 'amount'
+    # 'card_type'
+    # 'store_amount'
+    # 'card_no'
+    # 'bank_tran_id'
+    # 'status'
+    # 'tran_date'
+    # 'currency'
+    # 'card_issuer'
+    # 'card_brand'
+    # 'card_issuer_country'
+    # 'card_issuer_country_code'
+    # 'currency_type'
+    # 'currency_amount'
+    # 'currency_rate'
+    # 'base_fair'
+    # 'emi_instalment'
+    # 'emi_amount'
+    # 'emi_description'
+    # emi_issuer
+    # account_details
+    # risk_title
+    # risk_level
+    # validated_on
+    # card_ref_id
+    # discount_percentage
+    # discount_amount
+    # discount_remarks

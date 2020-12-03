@@ -84,6 +84,7 @@ class SSLCommerzIPNView(GenericAPIView):
             data=self.ssl_validation_res)
         validation_table_serializer.is_valid(raise_exception=True)
         print(self.ssl_validation_res)
+        validation_table_serializer.save()
         return Response({'msg': 'Validated'})
         try:
             pass
