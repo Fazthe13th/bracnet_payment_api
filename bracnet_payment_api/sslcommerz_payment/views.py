@@ -69,7 +69,7 @@ class SSLCommerzIPNView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         try:
             validate_url = reverse(
-                'sslc_payment_validate', args=[json.dumps(self.request.data)])
+                'sslc_payment_validate', args=[json.dumps(self.request.data)], request=request)
             print(validate_url)
             return redirect(validate_url)
         except Exception:
@@ -87,7 +87,7 @@ class SSLCommerzValidateView(GenericAPIView):
         return None
 
     def get(self, request, validation_data):
-        # print(validation_data)
+        print(validation_data)
         converted_validation_data = json.loads(validation_data)
         serializer = self.serializer_class(data=converted_validation_data)
         serializer.is_valid(raise_exception=True)
