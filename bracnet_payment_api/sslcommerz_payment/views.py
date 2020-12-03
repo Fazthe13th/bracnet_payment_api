@@ -82,6 +82,10 @@ class SSLCommerzValidateView(GenericAPIView):
     SSLCommerz = SSLCommerzfunc()
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
+    def post(self, request):
+        print('This is post')
+        return None
+
     def get(self, request, validation_data):
         # print(validation_data)
         converted_validation_data = json.loads(validation_data)
