@@ -73,7 +73,7 @@ class SslcommerzPaymentValidateModel(models.Model):
     card_issuer_country_code = models.CharField(max_length=2)
     store_id = models.CharField(max_length=50)
     verify_sign = models.CharField(max_length=255)
-    verify_key = models.CharField(max_length=255)
+    verify_key = models.TextField()
     currency_type = models.CharField(max_length=3)
     currency_amount = models.DecimalField(max_digits=10, decimal_places=2)
 
