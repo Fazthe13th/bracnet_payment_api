@@ -87,10 +87,10 @@ class SSLCommerzValidateView(GenericAPIView):
         return None
 
     def get(self, request, validation_data):
-        print(validation_data)
         converted_validation_data = json.loads(validation_data)
         serializer = self.serializer_class(data=converted_validation_data)
         serializer.is_valid(raise_exception=True)
+        print(converted_validation_data)
         try:
             post_body = {
                 'tran_id': converted_validation_data['tran_id'],
