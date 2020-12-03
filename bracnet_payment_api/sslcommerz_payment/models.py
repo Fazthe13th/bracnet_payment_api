@@ -50,8 +50,8 @@ class SslcommerzPaymentInitializationModel(models.Model):
 
 class SslcommerzPaymentValidateModel(models.Model):
     STATUS_CHOICES = {
-        ('VALID', 'VALID'), ('FAILED', 'FAILED'), ('CANCELLED',
-                                                   'CANCELLED'), ('UNATTEMPTED', 'UNATTEMPTED'), ('EXPIRED', 'EXPIRED')
+        ('VALIDATED', 'VALIDATED'), ('FAILED', 'FAILED'), ('CANCELLED',
+                                                           'CANCELLED'), ('UNATTEMPTED', 'UNATTEMPTED'), ('EXPIRED', 'EXPIRED')
     }
     CARD_BRAND_CHOICES = {
         ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
@@ -71,9 +71,6 @@ class SslcommerzPaymentValidateModel(models.Model):
     card_brand = models.CharField(choices=CARD_BRAND_CHOICES, max_length=50)
     card_issuer_country = models.CharField(max_length=50)
     card_issuer_country_code = models.CharField(max_length=2)
-    store_id = models.CharField(max_length=50)
-    verify_sign = models.CharField(max_length=255)
-    verify_key = models.TextField()
     currency_type = models.CharField(max_length=3)
     currency_amount = models.DecimalField(max_digits=10, decimal_places=2)
 

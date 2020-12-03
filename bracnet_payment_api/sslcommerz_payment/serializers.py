@@ -81,7 +81,7 @@ class SslcommerzValidationSerializer(serializers.ModelSerializer):
         model = SslcommerzPaymentValidateModel
         fields = ['tran_id', 'val_id', 'amount', 'card_type', 'store_amount', 'card_no', 'bank_tran_id',
                   'status', 'tran_date', 'currency', 'card_issuer', 'card_brand', 'card_issuer_country', 'card_issuer_country_code',
-                  'store_id', 'verify_sign', 'verify_key', 'currency_type', 'currency_amount']
+                  'currency_type', 'currency_amount']
 
     def validate(self, attrs):
         return attrs
