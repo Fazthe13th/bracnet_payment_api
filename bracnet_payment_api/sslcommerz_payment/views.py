@@ -67,10 +67,10 @@ class SSLCommerzIPNView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(self.request.data)
         try:
             validate_url = reverse(
                 'sslc_payment_validate', args=[json.dumps(self.request.data)])
+            print(validate_url)
             return redirect(validate_url)
         except Exception:
             return Response({'msg': 'SSLCommarz IPN response parsing failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -83,7 +83,7 @@ class SSLCommerzValidateView(GenericAPIView):
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
     def get(self, request, validation_data):
-        print(validation_data)
+        # print(validation_data)
         converted_validation_data = json.loads(validation_data)
         serializer = self.serializer_class(data=converted_validation_data)
         serializer.is_valid(raise_exception=True)
