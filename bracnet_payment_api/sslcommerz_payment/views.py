@@ -76,14 +76,17 @@ class SSLCommerzIPNView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        self.ssl_validation_res = self.SSLCommerz.validate_session(
+            request.data['val_id'])
+        print(request.data)
+        print(self.ssl_validation_res)
+        validation_table_serializer = SslcommerzValidationSerializer(
+            data=self.ssl_validation_res)
+        validation_table_serializer.is_valid(raise_exception=True)
+        print(self.ssl_validation_res)
+        return Response({'msg': 'Validated'})
         try:
-            self.ssl_validation_res = self.SSLCommerz.validate_session(
-                request.data['val_id'])
-            validation_table_serializer = SslcommerzValidationSerializer(
-                data=self.ssl_validation_res)
-            validation_table_serializer.is_valid(raise_exception=True)
-            print(self.ssl_validation_res)
-            return Response({'msg': 'Validated'})
+            pass
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
