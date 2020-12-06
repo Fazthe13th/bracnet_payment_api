@@ -3,22 +3,14 @@ from .serializers import SslcommerzPaymentInitializationSerializer, SslcommerzIP
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView, GenericAPIView
+from rest_framework.generics import ListCreateAPIView, GenericAPIView, ListAPIView, RetrieveAPIView
 from django.db import DatabaseError, DataError
 from django.shortcuts import redirect
 from rest_framework.reverse import reverse
-from django.http import HttpResponsePermanentRedirect
 from . SslcommerzAPICall.sslcommerz import SSLCommerzfunc
 import uuid
 import os
 import json
-
-
-# Custom redect to redict to HTTP sites
-
-
-class CustomRedirect(HttpResponsePermanentRedirect):
-    allowed_schemes = ['http', 'https']
 
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
@@ -68,47 +60,48 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class SslcommerzPaymentInitializationRetrive(RetrieveAPIView):
+    serializer_class = SslcommerzPaymentInitializationSerializer
+    queryset = SslcommerzPaymentInitializationModel.objects.all()
+    # permission_classes = (permissions.IsAuthenticated)
+    lookup_field = 'tran_id'
+
+    # def get_queryset(self):
+    #     print("This is the request" + str(self.request.GET))
+    #     return self.queryset.filter(tran_id=self.request.tran_id)
+
+
 class SSLCommerzIPNView(GenericAPIView):
     serializer_class = SslcommerzIPNSerializer
     # permission_classes = (permissions.IsAuthenticated,)
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.ssl_validation_res = self.SSLCommerz.validate_session(
-            request.data['val_id'])
-        validation_table_serializer = SslcommerzValidationSerializer(
-            data=self.ssl_validation_res)
-        validation_table_serializer.is_valid(raise_exception=True)
-        validation_table_serializer.save()
-        return Response({'msg': 'Validated'})
         try:
-            pass
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.ssl_validation_res = self.SSLCommerz.validate_session(
+                request.data['val_id'])
+            validation_table_serializer = SslcommerzValidationSerializer(
+                data=self.ssl_validation_res)
+            validation_table_serializer.is_valid(raise_exception=True)
+            validation_table_serializer.save()
+            return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class SSLCommerzValidateView(GenericAPIView):
+class SSLCommerzValidatedList(ListAPIView):
     serializer_class = SslcommerzValidationSerializer
     # permission_classes = (permissions.IsAuthenticated,)
-    SSLCommerz = SSLCommerzfunc()
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
-    def get(self, request, validation_data):
-        converted_validation_data = json.loads(validation_data)
-        serializer = self.serializer_class(data=converted_validation_data)
-        serializer.is_valid(raise_exception=True)
-        print(converted_validation_data)
-        try:
-            self.ssl_validation_res = self.SSLCommerz.validate_session(
-                converted_validation_data['val_id'])
-            print(self.ssl_validation_res)
-            # try:
-            #     serializer.save()
-            # except DatabaseError:
-            #     raise DatabaseError(
-            #         'Database crud has failed. Contact developer.')
-            return Response({'msg': 'Validated'})
-        except Exception:
-            raise Exception('Validation with SSLCommerz validation api failed')
+
+class SSLCommerzValidatedRetrive(RetrieveAPIView):
+    serializer_class = SslcommerzValidationSerializer
+    queryset = SslcommerzPaymentValidateModel.objects.all()
+    # permission_classes = (permissions.IsAuthenticated)
+    lookup_field = 'tran_id'
+
+    # def get_queryset(self):
+    #     return self.queryset.filter(tran_id=self.request.tran_id)
