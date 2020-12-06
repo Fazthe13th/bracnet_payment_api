@@ -25,19 +25,27 @@ class SslcommerzIPNSerializer(serializers.Serializer):
                                                  'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
     }
     tran_id = serializers.UUIDField()
-    val_id = serializers.CharField()
+    val_id = serializers.CharField(
+        required=False, allow_blank=True)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
-    card_type = serializers.CharField(max_length=255)
-    store_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
-    card_no = serializers.CharField(max_length=16)
+    card_type = serializers.CharField(
+        max_length=255,   required=False, allow_blank=True)
+    store_amount = serializers.DecimalField(
+        max_digits=10, decimal_places=2, required=False)
+    card_no = serializers.CharField(
+        max_length=16,   required=False, allow_blank=True)
     bank_tran_id = serializers.CharField(max_length=255)
     status = serializers.ChoiceField(choices=STATUS_CHOICES)
     tran_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     currency = serializers.CharField(min_length=3)
-    card_issuer = serializers.CharField(max_length=50)
-    card_brand = serializers.ChoiceField(choices=CARD_BRAND_CHOICES)
-    card_issuer_country = serializers.CharField(max_length=50)
-    card_issuer_country_code = serializers.CharField(max_length=2)
+    card_issuer = serializers.CharField(
+        max_length=50,   required=False, allow_blank=True)
+    card_brand = serializers.ChoiceField(
+        choices=CARD_BRAND_CHOICES,   required=False, allow_blank=True)
+    card_issuer_country = serializers.CharField(
+        max_length=50,   required=False, allow_blank=True)
+    card_issuer_country_code = serializers.CharField(
+        max_length=2,   required=False, allow_blank=True)
     store_id = serializers.CharField(max_length=50)
     verify_sign = serializers.CharField(max_length=255)
     verify_key = serializers.CharField()
@@ -114,3 +122,56 @@ class SslcommerzValidationSerializer(serializers.ModelSerializer):
     # discount_percentage
     # discount_amount
     # discount_remarks
+
+    # {"amount": "1500.00",
+    #  "bank_tran_id": "2012061745429BE4sFxEgnvawsk",
+    #   "base_fair": "0.00",
+    #    "card_brand": ",
+    #     "card_issuer": ",
+    #      "card_issuer_country": ",
+    #       "card_issuer_country_code": ",
+    #        "card_no": ",
+    #         "card_sub_brand": "Classic",
+    #          "card_type": ",
+    #           "currency": "BDT",
+    #            "currency_amount": "1500.00",
+    #             "currency_rate": "1.0000",
+    #              "currency_type": "BDT",
+    #               "error": "Do not honor",
+    #                "status": "FAILED",
+    #                 "store_id": "bracn5f9fee32c615c",
+    #                  "tran_date": "2020-12-06 17:45:20",
+    #                   "tran_id": "a72c8151-2f64-4c04-a149-ab79d42b3b71",
+    #                    "value_a": ",
+    #                     "value_b": ",
+    #                      "value_c": ",
+    #                       "value_d": ",
+    #                        "verify_sign": "06cf43b331e79f45b07a23aab61861a6",
+    #                         "verify_sign_sha2": ["776fc0466c7842ff9cdda06b5b99fd491880fb87ead1f18eef10ba75f5556631",
+    #                          "verify_key": ["amount,bank_tran_id,base_fair,card_brand,card_issuer,card_issuer_country,card_issuer_country_code,card_no,card_sub_brand,card_type,currency,currency_amount,currency_rate,currency_type,error,status,store_id,tran_date,tran_id,value_a,value_b,value_c,value_d"}
+# {"amount": "1500.00",
+#      "bank_tran_id": "2012061745429BE4sFxEgnvawsk",
+#       "base_fair": "0.00",
+#        "card_brand": "",
+#         "card_issuer": "",
+#          "card_issuer_country": "",
+#           "card_issuer_country_code": "",
+#            "card_no": "",
+#             "card_sub_brand": "Classic",
+#              "card_type": "",
+#               "currency": "BDT",
+#                "currency_amount": "1500.00",
+#                 "currency_rate": "1.0000",
+#                  "currency_type": "BDT",
+#                   "error": "Do not honor",
+#                    "status": "FAILED",
+#                     "store_id": "bracn5f9fee32c615c",
+#                      "tran_date": "2020-12-06 17:45:20",
+#                       "tran_id": "a72c8151-2f64-4c04-a149-ab79d42b3b71",
+#                        "value_a": "",
+#                         "value_b": "",
+#                          "value_c": "",
+#                           "value_d": "",
+#                            "verify_sign": "06cf43b331e79f45b07a23aab61861a6",
+#                             "verify_sign_sha2": "776fc0466c7842ff9cdda06b5b99fd491880fb87ead1f18eef10ba75f5556631",
+#                              "verify_key":"amount,bank_tran_id,base_fair,card_brand,card_issuer,card_issuer_country,card_issuer_country_code,card_no,card_sub_brand,card_type,currency,currency_amount,currency_rate,currency_type,error,status,store_id,tran_date,tran_id,value_a,value_b,value_c,value_d"}
