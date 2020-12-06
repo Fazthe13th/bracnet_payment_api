@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 
 
 class SslcommerzPaymentInitializationSerializer(serializers.ModelSerializer):
-    # tran_id = serializers.UUIDField(read_only=True)
+    tran_id = serializers.UUIDField(read_only=True)
 
     class Meta:
         model = SslcommerzPaymentInitializationModel
