@@ -78,10 +78,11 @@ class SSLCommerzIPNView(GenericAPIView):
 
     def post(self, request):
         try:
-            print(request.data)
+            print(request.data.get('bank_tran_id'))
+            print(request.data.get('val_id', 0))
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(request.data.get('val_id', 0))
+
             if request.data.get('val_id') is not None:
                 print('In the val_id condition')
                 self.ssl_validation_res = self.SSLCommerz.validate_session(
