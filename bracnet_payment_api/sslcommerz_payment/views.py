@@ -17,15 +17,15 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
     serializer_class = SslcommerzPaymentInitializationSerializer
     # permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentInitializationModel.objects.all()
-    sslc_tran_uuid = uuid.uuid4()
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        sslc_tran_uuid = uuid.uuid4()
         try:
             post_body = {
-                'tran_id': self.sslc_tran_uuid,
+                'tran_id': sslc_tran_uuid,
                 'total_amount': self.request.data['total_amount'],
                 'currency': self.request.data['currency'],
                 'success_url': str(os.getenv("SUCCESS_URL_SSLC")),
@@ -46,11 +46,11 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
             }
             self.sslc_response = self.SSLCommerz.create_session(post_body)
             if self.sslc_response['status'] == 'FAILED':
-                serializer.save(tran_id=self.sslc_tran_uuid,
+                serializer.save(tran_id=sslc_tran_uuid,
                                 status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'])
                 return Response({'error': 'SSLCommerz session creation failed',
                                  'failed_reason': self.sslc_response['failedreason']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            serializer.save(tran_id=self.sslc_tran_uuid,
+            serializer.save(tran_id=sslc_tran_uuid,
                             status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'])
             return Response({'msg': 'SSLCommerz session created',
                              'payment_url': self.sslc_response['GatewayPageURL']}, status=status.HTTP_200_OK)
@@ -125,6 +125,7 @@ class SSLCommerzIPNView(GenericAPIView):
                     'isTokeizeSuccess': 0,
                     'campaign_code': ''
                 }
+            print(self.ssl_validation_res)
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
