@@ -77,7 +77,6 @@ class SSLCommerzIPNView(GenericAPIView):
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
-        try:
             print(request.data)
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
@@ -89,6 +88,8 @@ class SSLCommerzIPNView(GenericAPIView):
             validation_table_serializer.is_valid(raise_exception=True)
             validation_table_serializer.save()
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
+        try:
+            pass
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
