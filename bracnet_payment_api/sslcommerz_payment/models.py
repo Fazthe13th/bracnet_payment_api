@@ -50,13 +50,13 @@ class SslcommerzPaymentInitializationModel(models.Model):
 
 
 class SslcommerzPaymentValidateModel(models.Model):
-    STATUS_CHOICES = {
-        ('VALIDATED', 'VALIDATED'), ('INVALID_TRANSACTION', 'INVALID_TRANSACTION')
-    }
-    CARD_BRAND_CHOICES = {
-        ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
-                                                 'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
-    }
+    # STATUS_CHOICES = {
+    #     ('VALIDATED', 'VALIDATED'), ('INVALID_TRANSACTION', 'INVALID_TRANSACTION')
+    # }
+    # CARD_BRAND_CHOICES = {
+    #     ('VISA', 'VISA'), ('MASTER', 'MASTER'), ('AMEX',
+    #                                              'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
+    # }
     tran_id = models.UUIDField(unique=True, db_index=True)
     val_id = models.CharField(unique=True, db_index=True, max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -64,12 +64,12 @@ class SslcommerzPaymentValidateModel(models.Model):
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
     card_no = models.CharField(max_length=16, null=True, default=None)
     bank_tran_id = models.CharField(max_length=255, null=True, default=None)
-    status = models.CharField(choices=STATUS_CHOICES,
-                              max_length=50, null=True, default=None)
+    status = models.CharField(
+        max_length=100, null=True, default=None)
     tran_date = models.DateTimeField(default=now())
     currency = models.CharField(max_length=3, null=True, default=None)
     card_issuer = models.CharField(max_length=50, null=True, default=None)
-    card_brand = models.CharField(choices=CARD_BRAND_CHOICES, max_length=50)
+    card_brand = models.CharField(max_length=50)
     card_issuer_country = models.CharField(max_length=50, default='Bangladesh')
     card_issuer_country_code = models.CharField(max_length=2, default='BD')
     currency_type = models.CharField(max_length=3, default='BDT')
