@@ -78,12 +78,14 @@ class SSLCommerzIPNView(GenericAPIView):
 
     def post(self, request):
         try:
+            print(request.data)
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.ssl_validation_res = self.SSLCommerz.validate_session(
                 request.data['val_id'])
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
+            print(self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
             validation_table_serializer.save()
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
