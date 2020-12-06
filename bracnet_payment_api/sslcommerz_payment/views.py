@@ -77,20 +77,59 @@ class SSLCommerzIPNView(GenericAPIView):
     SSLCommerz = SSLCommerzfunc()
 
     def post(self, request):
-        print(request.data)
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.ssl_validation_res = self.SSLCommerz.validate_session(
-            request.data['val_id'])
-        print(self.ssl_validation_res)
-        validation_table_serializer = SslcommerzValidationSerializer(
-            data=self.ssl_validation_res)
-        print(self.ssl_validation_res)
-        validation_table_serializer.is_valid(raise_exception=True)
-        validation_table_serializer.save()
-        return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         try:
-            pass
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            if request.data['val_id']:
+                self.ssl_validation_res = self.SSLCommerz.validate_session(
+                    request.data['val_id'])
+            else:
+                self.ssl_validation_res = {
+                    'status': request.data['status'],
+                    'tran_date': request.data['tran_date'],
+                    'tran_id': request.data['tran_id'],
+                    'val_id': None,
+                    'amount': request.data['amount'],
+                    'store_amount': 0.00,
+                    'currency': request.data['currency'],
+                    'bank_tran_id': request.data['bank_tran_id'],
+                    'card_type': request.data['card_type'],
+                    'card_no': request.data['card_no'],
+                    'card_issuer': request.data['card_issuer'],
+                    'card_brand': request.data['card_brand'],
+                    'card_issuer_country': request.data['card_issuer_country'],
+                    'card_issuer_country_code': request.data['card_issuer_country_code'],
+                    'currency_type': request.data['currency_type'],
+                    'currency_amount': request.data['currency_amount'],
+                    'currency_rate': request.data['currency_rate'],
+                    'base_fair': request.data['base_fair'],
+                    'value_a': request.data['value_a'],
+                    'value_b': request.data['value_b'],
+                    'value_c': request.data['value_c'],
+                    'value_d': request.data['value_d'],
+                    'emi_instalment': '0',
+                    'emi_amount': '0.00',
+                    'emi_description': None,
+                    'emi_issuer': None,
+                    'account_details': None,
+                    'risk_title': 'N/A',
+                    'risk_level': 'N/A',
+                    'APIConnect': None,
+                    'validated_on': None,
+                    'gw_version': '',
+                    'offer_avail': 0,
+                    'card_ref_id': 'N/A',
+                    'discount_percentage': '0',
+                    'discount_amount': '0',
+                    'discount_remarks': None,
+                    'isTokeizeSuccess': 0,
+                    'campaign_code': ''
+                }
+            validation_table_serializer = SslcommerzValidationSerializer(
+                data=self.ssl_validation_res)
+            validation_table_serializer.is_valid(raise_exception=True)
+            validation_table_serializer.save()
+            return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

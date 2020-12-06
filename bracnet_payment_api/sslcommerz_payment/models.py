@@ -58,7 +58,7 @@ class SslcommerzPaymentValidateModel(models.Model):
     #                                              'AMEX'), ('IB', 'IB'), ('MOBILE BANKING', 'MOBILE BANKING')
     # }
     tran_id = models.UUIDField(unique=True, db_index=True)
-    val_id = models.CharField(unique=True, db_index=True, max_length=255)
+    val_id = models.CharField(max_length=255, null=True, default=None)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     card_type = models.CharField(max_length=255, null=True, default=None)
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
