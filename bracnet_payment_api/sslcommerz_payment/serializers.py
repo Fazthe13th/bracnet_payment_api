@@ -9,7 +9,8 @@ class SslcommerzPaymentInitializationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SslcommerzPaymentInitializationModel
         fields = ['tran_id', 'total_amount', 'currency', 'emi_option', 'cus_name', 'cus_phone', 'cus_email', 'cus_add1',
-                  'cus_city', 'cus_country', 'shipping_method', 'num_of_item', 'product_name', 'product_category', 'product_profile']
+                  'cus_city', 'cus_country', 'shipping_method', 'num_of_item', 'product_name', 'product_category', 'product_profile',
+                  'success_url', 'fail_url', 'cancel_url']
 
     def validate(self, attrs):
         return attrs
