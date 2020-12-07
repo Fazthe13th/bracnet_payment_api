@@ -59,7 +59,8 @@ class SslcommerzPaymentValidateModel(models.Model):
     # }
     tran_id = models.UUIDField(unique=True, db_index=True)
     val_id = models.CharField(max_length=255, null=True, default=None)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00, null=True)
     card_type = models.CharField(max_length=255, null=True, default=None)
     store_amount = models.DecimalField(max_digits=10, decimal_places=2)
     card_no = models.CharField(max_length=16, null=True, default=None)
@@ -69,10 +70,12 @@ class SslcommerzPaymentValidateModel(models.Model):
     tran_date = models.DateTimeField(default=now())
     currency = models.CharField(max_length=3, null=True, default=None)
     card_issuer = models.CharField(max_length=50, null=True, default=None)
-    card_brand = models.CharField(max_length=50)
-    card_issuer_country = models.CharField(max_length=50, default='Bangladesh')
-    card_issuer_country_code = models.CharField(max_length=2, default='BD')
-    currency_type = models.CharField(max_length=3, default='BDT')
+    card_brand = models.CharField(max_length=50, null=True, default=None)
+    card_issuer_country = models.CharField(
+        max_length=50, default=None, null=True)
+    card_issuer_country_code = models.CharField(
+        max_length=2, default=None, null=True)
+    currency_type = models.CharField(max_length=3, default=None, null=None)
     currency_amount = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
     currency_rate = models.DecimalField(
@@ -82,11 +85,11 @@ class SslcommerzPaymentValidateModel(models.Model):
     emi_instalment = models.CharField(max_length=3, default=0)
     emi_amount = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00)
-    emi_description = models.TextField(default='no description')
+    emi_description = models.TextField(default=None, null=True)
     emi_issuer = models.CharField(max_length=100, null=True, default=None)
     risk_title = models.CharField(max_length=50, null=True, default=None)
     risk_level = models.CharField(max_length=3, null=True, default=None)
-    validated_on = models.DateTimeField(default=now())
+    validated_on = models.DateTimeField(default=None, null=True)
     card_ref_id = models.CharField(max_length=255, null=True, default=None)
     discount_percentage = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, default=None)

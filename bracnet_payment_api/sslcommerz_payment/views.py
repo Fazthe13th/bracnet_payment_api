@@ -80,14 +80,14 @@ class SSLCommerzIPNView(GenericAPIView):
         try:
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
-            print(request.data.get('bank_tran_id'))
-            print(request.data.get('val_id', 0))
             if request.data.get('val_id', 0) != 0:
                 print('In the val_id condition')
                 self.ssl_validation_res = self.SSLCommerz.validate_session(
                     request.data['val_id'])
             else:
                 print('val_id is none')
+                # self.ssl_validation_res = {'status': 'FAILED', 'tran_date': '2020-12-06 19:13:39', 'tran_id': '27126c3b-5d4b-4e0e-a65b-322e0ae2de7e', 'val_id': '', 'amount': '1500.00', 'store_amount': '0.0', 'currency': 'BDT', 'bank_tran_id': '2012061914011NVp3ctrRh7Srxw', 'card_type': '', 'card_no': '', 'card_issuer': '', 'card_brand': '', 'card_issuer_country': '', 'card_issuer_country_code': '', 'currency_type': 'BDT', 'currency_amount': '1500.00', 'currency_rate': '1.0000',
+                #                            'base_fair': '0.00', 'value_a': '', 'value_b': '', 'value_c': '', 'value_d': '', 'emi_instalment': '0', 'emi_amount': '0.00', 'emi_description': '', 'emi_issuer': '', 'account_details': '', 'risk_title': 'N/A', 'risk_level': 'N/A', 'APIConnect': '', 'validated_on': None, 'gw_version': '', 'offer_avail': 0, 'card_ref_id': 'N/A', 'discount_percentage': '0', 'discount_amount': '0', 'discount_remarks': '', 'isTokeizeSuccess': 0, 'campaign_code': ''}
                 self.ssl_validation_res = {
                     'status': request.data['status'],
                     'tran_date': request.data['tran_date'],
@@ -119,7 +119,7 @@ class SSLCommerzIPNView(GenericAPIView):
                     'risk_title': 'N/A',
                     'risk_level': 'N/A',
                     'APIConnect': '',
-                    'validated_on': '',
+                    'validated_on': None,
                     'gw_version': '',
                     'offer_avail': 0,
                     'card_ref_id': 'N/A',
@@ -129,13 +129,11 @@ class SSLCommerzIPNView(GenericAPIView):
                     'isTokeizeSuccess': 0,
                     'campaign_code': ''
                 }
-            print(self.ssl_validation_res)
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
             validation_table_serializer.save()
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
-
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

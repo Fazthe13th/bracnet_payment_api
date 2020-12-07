@@ -85,6 +85,26 @@ class SslcommerzIPNSerializer(serializers.Serializer):
 
 
 class SslcommerzValidationSerializer(serializers.ModelSerializer):
+    amount = serializers.DecimalField(
+        max_digits=10, decimal_places=2)
+    card_type = serializers.CharField(required=False, allow_blank=True)
+    card_no = serializers.CharField(required=False, allow_blank=True)
+    bank_tran_id = serializers.CharField(required=False, allow_blank=True)
+    tran_date = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S", input_formats=['%Y-%m-%d %H:%M:%S', ])
+    validated_on = serializers.DateTimeField(
+        allow_null=True, required=False)
+    val_id = serializers.CharField(required=False, allow_blank=True)
+    card_issuer = serializers.CharField(required=False, allow_blank=True)
+    card_brand = serializers.CharField(required=False, allow_blank=True)
+    card_issuer_country = serializers.CharField(
+        required=False, allow_blank=True)
+    card_issuer_country_code = serializers.CharField(
+        required=False, allow_blank=True)
+    emi_description = serializers.CharField(required=False, allow_blank=True)
+    emi_issuer = serializers.CharField(required=False, allow_blank=True)
+    discount_remarks = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = SslcommerzPaymentValidateModel
         fields = '__all__'
