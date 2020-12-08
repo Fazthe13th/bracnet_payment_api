@@ -15,7 +15,7 @@ import json
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
     serializer_class = SslcommerzPaymentInitializationSerializer
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentInitializationModel.objects.all()
     SSLCommerz = SSLCommerzfunc()
 
@@ -66,7 +66,7 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
 class SslcommerzPaymentInitializationRetrive(RetrieveAPIView):
     serializer_class = SslcommerzPaymentInitializationSerializer
     queryset = SslcommerzPaymentInitializationModel.objects.all()
-    # permission_classes = (permissions.IsAuthenticated)
+    permission_classes = (permissions.IsAuthenticated)
     lookup_field = 'tran_id'
 
     # def get_queryset(self):
@@ -75,6 +75,9 @@ class SslcommerzPaymentInitializationRetrive(RetrieveAPIView):
 
 
 class SSLCommerzIPNView(GenericAPIView):
+    """
+    This View will receive the IPN POST request from SSLCommerz
+    """
     serializer_class = SslcommerzIPNSerializer
     # permission_classes = (permissions.IsAuthenticated,)
     SSLCommerz = SSLCommerzfunc()
@@ -84,13 +87,9 @@ class SSLCommerzIPNView(GenericAPIView):
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
             if request.data.get('val_id', 0) != 0:
-                print('In the val_id condition')
                 self.ssl_validation_res = self.SSLCommerz.validate_session(
                     request.data['val_id'])
             else:
-                print('val_id is none')
-                # self.ssl_validation_res = {'status': 'FAILED', 'tran_date': '2020-12-06 19:13:39', 'tran_id': '27126c3b-5d4b-4e0e-a65b-322e0ae2de7e', 'val_id': '', 'amount': '1500.00', 'store_amount': '0.0', 'currency': 'BDT', 'bank_tran_id': '2012061914011NVp3ctrRh7Srxw', 'card_type': '', 'card_no': '', 'card_issuer': '', 'card_brand': '', 'card_issuer_country': '', 'card_issuer_country_code': '', 'currency_type': 'BDT', 'currency_amount': '1500.00', 'currency_rate': '1.0000',
-                #                            'base_fair': '0.00', 'value_a': '', 'value_b': '', 'value_c': '', 'value_d': '', 'emi_instalment': '0', 'emi_amount': '0.00', 'emi_description': '', 'emi_issuer': '', 'account_details': '', 'risk_title': 'N/A', 'risk_level': 'N/A', 'APIConnect': '', 'validated_on': None, 'gw_version': '', 'offer_avail': 0, 'card_ref_id': 'N/A', 'discount_percentage': '0', 'discount_amount': '0', 'discount_remarks': '', 'isTokeizeSuccess': 0, 'campaign_code': ''}
                 self.ssl_validation_res = {
                     'status': request.data['status'],
                     'tran_date': request.data['tran_date'],
@@ -143,15 +142,12 @@ class SSLCommerzIPNView(GenericAPIView):
 
 class SSLCommerzValidatedList(ListAPIView):
     serializer_class = SslcommerzValidationSerializer
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
 
 class SSLCommerzValidatedRetrive(RetrieveAPIView):
     serializer_class = SslcommerzValidationSerializer
     queryset = SslcommerzPaymentValidateModel.objects.all()
-    # permission_classes = (permissions.IsAuthenticated)
+    permission_classes = (permissions.IsAuthenticated)
     lookup_field = 'tran_id'
-
-    # def get_queryset(self):
-    #     return self.queryset.filter(tran_id=self.request.tran_id)
