@@ -11,6 +11,7 @@ from . SslcommerzAPICall.sslcommerz import SSLCommerzfunc
 import uuid
 import os
 import json
+from . SslcAddBalance.sslc_add_balance import SSLcAddBalance
 
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
@@ -45,16 +46,17 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
                 'num_of_item': self.request.data['num_of_item'],
                 'product_name': self.request.data['product_name'],
                 'product_category': self.request.data['product_category'],
-                'product_profile': self.request.data['product_profile']
+                'product_profile': self.request.data['product_profile'],
+                'value_a': self.request.data['customer_id']
             }
             self.sslc_response = self.SSLCommerz.create_session(post_body)
             if self.sslc_response['status'] == 'FAILED':
                 serializer.save(tran_id=sslc_tran_uuid,
-                                status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'])
+                                status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
                 return Response({'error': 'SSLCommerz session creation failed',
                                  'failed_reason': self.sslc_response['failedreason']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             serializer.save(tran_id=sslc_tran_uuid,
-                            status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'])
+                            status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
             return Response({'msg': 'SSLCommerz session created',
                              'payment_url': self.sslc_response['GatewayPageURL']}, status=status.HTTP_200_OK)
         except DatabaseError:
@@ -81,6 +83,7 @@ class SSLCommerzIPNView(GenericAPIView):
     serializer_class = SslcommerzIPNSerializer
     # permission_classes = (permissions.IsAuthenticated,)
     SSLCommerz = SSLCommerzfunc()
+    SSLcAddBalance_obj = SSLcAddBalance()
 
     def post(self, request):
         try:
@@ -135,6 +138,10 @@ class SSLCommerzIPNView(GenericAPIView):
                 data=self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
             validation_table_serializer.save()
+            # add this value to rdp database
+            self.SSLcAddBalance_obj.add_balance(
+                request.data['value_a'], request.data['store_amount'])
+
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
             return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
