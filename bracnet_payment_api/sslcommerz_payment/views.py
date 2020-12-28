@@ -24,41 +24,42 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         sslc_tran_uuid = uuid.uuid4()
-        try:
-            post_body = {
-                'tran_id': sslc_tran_uuid,
-                'total_amount': self.request.data['total_amount'],
-                'currency': self.request.data['currency'],
-                'success_url': self.request.data['success_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
-                'fail_url': self.request.data['fail_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
-                'cancel_url': self.request.data['cancel_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
-                'emi_option': self.request.data['emi_option'],
-                'cus_name': self.request.data['cus_name'],
-                'cus_email': self.request.data['cus_email'],
-                'cus_phone': self.request.data['cus_phone'],
-                'cus_add1': self.request.data['cus_add1'],
-                'cus_city': self.request.data['cus_city'],
-                'cus_country': self.request.data['cus_country'],
-                'shipping_method': self.request.data['shipping_method'],
-                'num_of_item': self.request.data['num_of_item'],
-                'product_name': self.request.data['product_name'],
-                'product_category': self.request.data['product_category'],
-                'product_profile': self.request.data['product_profile'],
-                'value_a': self.request.data['customer_id']
-            }
-            self.sslc_response = self.SSLCommerz.create_session(post_body)
-            if self.sslc_response['status'] == 'FAILED':
-                serializer.save(tran_id=sslc_tran_uuid,
-                                status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
-                return Response({'error': 'SSLCommerz session creation failed',
-                                 'failed_reason': self.sslc_response['failedreason']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        post_body = {
+            'tran_id': sslc_tran_uuid,
+            'total_amount': self.request.data['total_amount'],
+            'currency': self.request.data['currency'],
+            'success_url': self.request.data['success_url'] + '?tran_id=' + str(
+                sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+            'fail_url': self.request.data['fail_url'] + '?tran_id=' + str(
+                sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+            'cancel_url': self.request.data['cancel_url'] + '?tran_id=' + str(
+                sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+            'emi_option': self.request.data['emi_option'],
+            'cus_name': self.request.data['cus_name'],
+            'cus_email': self.request.data['cus_email'],
+            'cus_phone': self.request.data['cus_phone'],
+            'cus_add1': self.request.data['cus_add1'],
+            'cus_city': self.request.data['cus_city'],
+            'cus_country': self.request.data['cus_country'],
+            'shipping_method': self.request.data['shipping_method'],
+            'num_of_item': self.request.data['num_of_item'],
+            'product_name': self.request.data['product_name'],
+            'product_category': self.request.data['product_category'],
+            'product_profile': self.request.data['product_profile'],
+            'value_a': self.request.data['customer_id']
+        }
+        self.sslc_response = self.SSLCommerz.create_session(post_body)
+        if self.sslc_response['status'] == 'FAILED':
             serializer.save(tran_id=sslc_tran_uuid,
                             status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
-            return Response({'msg': 'SSLCommerz session created',
-                             'payment_url': self.sslc_response['GatewayPageURL']}, status=status.HTTP_200_OK)
+            return Response({'error': 'SSLCommerz session creation failed',
+                             'failed_reason': self.sslc_response['failedreason']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer.save(tran_id=sslc_tran_uuid,
+                        status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
+        return Response({'msg': 'SSLCommerz session created',
+                         'payment_url': self.sslc_response['GatewayPageURL']}, status=status.HTTP_200_OK)
+        try:
+            pass
         except DatabaseError:
             return Response({'error': 'Database error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
