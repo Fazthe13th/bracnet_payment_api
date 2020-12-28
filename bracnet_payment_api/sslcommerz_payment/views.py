@@ -52,11 +52,11 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
         print(self.sslc_response)
         if self.sslc_response['status'] == 'FAILED':
             serializer.save(tran_id=sslc_tran_uuid,
-                            status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
+                            status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=post_body['value_a'])
             return Response({'error': 'SSLCommerz session creation failed',
                              'failed_reason': self.sslc_response['failedreason']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer.save(tran_id=sslc_tran_uuid,
-                        status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=self.sslc_response['value_a'])
+                        status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=post_body['value_a'])
         return Response({'msg': 'SSLCommerz session created',
                          'payment_url': self.sslc_response['GatewayPageURL']}, status=status.HTTP_200_OK)
         try:
@@ -136,13 +136,14 @@ class SSLCommerzIPNView(GenericAPIView):
                     'isTokeizeSuccess': 0,
                     'campaign_code': ''
                 }
+            print(request.data['value_a'])
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
             validation_table_serializer.save()
             # add this value to rdp database
-            self.SSLcAddBalance_obj.add_balance(
-                request.data['value_a'], request.data['store_amount'])
+            # self.SSLcAddBalance_obj.add_balance(
+            #     request.data['value_a'], request.data['store_amount'])
 
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
