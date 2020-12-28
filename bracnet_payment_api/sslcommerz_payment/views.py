@@ -87,6 +87,8 @@ class SSLCommerzIPNView(GenericAPIView):
     SSLcAddBalance_obj = SSLcAddBalance()
 
     def post(self, request):
+        self.SSLcAddBalance_obj.add_balance(
+            120002, 800)
         try:
             # serializer = self.serializer_class(data=request.data)
             # serializer.is_valid(raise_exception=True)
@@ -143,8 +145,6 @@ class SSLCommerzIPNView(GenericAPIView):
             # add this value to rdp database
             # self.SSLcAddBalance_obj.add_balance(
             #     request.data['value_a'], request.data['store_amount'])
-            self.SSLcAddBalance_obj.add_balance(
-                120002, 800)
 
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
