@@ -16,7 +16,7 @@ from . SslcAddBalance.sslc_add_balance import SSLcAddBalance
 
 class SslcommerzPaymentInitializationView(ListCreateAPIView):
     serializer_class = SslcommerzPaymentInitializationSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentInitializationModel.objects.all()
     SSLCommerz = SSLCommerzfunc()
 
@@ -149,12 +149,12 @@ class SSLCommerzIPNView(GenericAPIView):
 
 class SSLCommerzValidatedList(ListAPIView):
     serializer_class = SslcommerzValidationSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
     queryset = SslcommerzPaymentValidateModel.objects.all()
 
 
 class SSLCommerzValidatedRetrive(RetrieveAPIView):
     serializer_class = SslcommerzValidationSerializer
     queryset = SslcommerzPaymentValidateModel.objects.all()
-    permission_classes = (permissions.IsAuthenticated)
+    # permission_classes = (permissions.IsAuthenticated)
     lookup_field = 'tran_id'
