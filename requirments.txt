@@ -18,13 +18,16 @@ isort==5.6.4
 itypes==1.2.0
 Jinja2==2.11.2
 lazy-object-proxy==1.4.3
+mariadb==1.0.5
 MarkupSafe==1.1.1
 mccabe==0.6.1
-mysqlclient
+mysqlclient @ file:///D:/Bracnet/bracnet_payment_api/bracnet_payment_api/mysqlclient-1.4.6-cp38-cp38-win32.whl
 packaging==20.4
 pycodestyle==2.6.0
 PyJWT==1.7.1
 pylint==2.6.0
+pylint-django==2.3.0
+pylint-plugin-utils==0.6
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-dotenv==0.15.0
