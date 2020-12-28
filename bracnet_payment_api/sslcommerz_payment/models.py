@@ -44,7 +44,7 @@ class SslcommerzPaymentInitializationModel(models.Model):
     success_url = models.URLField(max_length=255, null=True)
     fail_url = models.URLField(max_length=255, null=True)
     cancel_url = models.URLField(max_length=255, null=True)
-    customer_id = models.CharField(max_length=20)
+    customer_id = models.CharField(max_length=20, default=0)
 
     class Meta:
         ordering: ['-payment_date']
