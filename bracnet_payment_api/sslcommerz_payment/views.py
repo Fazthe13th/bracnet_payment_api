@@ -51,7 +51,6 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
                 'value_a': self.request.data['customer_id']
             }
             self.sslc_response = self.SSLCommerz.create_session(post_body)
-            print(self.sslc_response)
             if self.sslc_response['status'] == 'FAILED':
                 serializer.save(tran_id=sslc_tran_uuid,
                                 status=self.sslc_response['status'], failed_reason=self.sslc_response['failedreason'], customer_id=post_body['value_a'])
