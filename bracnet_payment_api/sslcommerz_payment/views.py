@@ -149,7 +149,7 @@ class SSLCommerzIPNView(GenericAPIView):
             payload = {"transaction_id": request.data['tran_id'],
                        "customer_id": request.data['value_a'],
                        "store_amount": request.data['amount'],
-                       "payment_method": 1}
+                       "payment_method": 9}
             headers = {"Content-Type": "application/json"}
             res = requests.post(url, data=payload, headers=headers)
 
