@@ -9,4 +9,11 @@ class BkashWebhookApiView(GenericAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        return Response(request.data)
+        url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+        payload = {"transaction_id": "798b97e6-1232-4e4f-8422-c97befc6357d",
+                   "customer_id": 11002,
+                   "store_amount": 800,
+                   "payment_method": 9}
+        headers = {"Content-Type": "application/json"}
+        res = requests.post(url, data=payload, headers=headers)
+        return Response(res)
