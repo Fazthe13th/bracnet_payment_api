@@ -24,7 +24,7 @@ class SSLcAddBalance():
     def add_balance(self, custumer_id, payed_amount):
         rdp_db = self.connect_rdp_db()
         if not rdp_db:
-            print('VOIP Report Database not connected')
+            print('RDP Database not connected')
             return False
         cursor = rdp_db.cursor()
         try:

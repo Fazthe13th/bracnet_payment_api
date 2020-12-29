@@ -11,6 +11,7 @@ from . SslcommerzAPICall.sslcommerz import SSLCommerzfunc
 import uuid
 import os
 import json
+import requests
 from . SslcAddBalance.sslc_add_balance import SSLcAddBalance
 
 
@@ -81,70 +82,76 @@ class SSLCommerzIPNView(GenericAPIView):
     """
     This View will receive the IPN POST request from SSLCommerz
     """
-    # serializer_class = SslcommerzIPNSerializer
-    # # permission_classes = (permissions.IsAuthenticated,)
-    # SSLCommerz = SSLCommerzfunc()
-    SSLcAddBalance_obj = SSLcAddBalance()
+    serializer_class = SslcommerzIPNSerializer
+    # permission_classes = (permissions.IsAuthenticated,)
+    SSLCommerz = SSLCommerzfunc()
+    # SSLcAddBalance_obj = SSLcAddBalance()
 
     def post(self, request):
-        self.SSLcAddBalance_obj.add_balance(
-            120002, 800)
         try:
-            # serializer = self.serializer_class(data=request.data)
-            # serializer.is_valid(raise_exception=True)
-            # if request.data.get('val_id', 0) != 0:
-            #     self.ssl_validation_res = self.SSLCommerz.validate_session(
-            #         request.data['val_id'])
-            # else:
-            #     self.ssl_validation_res = {
-            #         'status': request.data['status'],
-            #         'tran_date': request.data['tran_date'],
-            #         'tran_id': request.data['tran_id'],
-            #         'val_id': '',
-            #         'amount': request.data['amount'],
-            #         'store_amount': 0.00,
-            #         'currency': request.data['currency'],
-            #         'bank_tran_id': request.data['bank_tran_id'],
-            #         'card_type': request.data['card_type'],
-            #         'card_no': request.data['card_no'],
-            #         'card_issuer': request.data['card_issuer'],
-            #         'card_brand': request.data['card_brand'],
-            #         'card_issuer_country': request.data['card_issuer_country'],
-            #         'card_issuer_country_code': request.data['card_issuer_country_code'],
-            #         'currency_type': request.data['currency_type'],
-            #         'currency_amount': request.data['currency_amount'],
-            #         'currency_rate': request.data['currency_rate'],
-            #         'base_fair': request.data['base_fair'],
-            #         'value_a': request.data['value_a'],
-            #         'value_b': request.data['value_b'],
-            #         'value_c': request.data['value_c'],
-            #         'value_d': request.data['value_d'],
-            #         'emi_instalment': '0',
-            #         'emi_amount': '0.00',
-            #         'emi_description': '',
-            #         'emi_issuer': '',
-            #         'account_details': '',
-            #         'risk_title': 'N/A',
-            #         'risk_level': 'N/A',
-            #         'APIConnect': '',
-            #         'validated_on': None,
-            #         'gw_version': '',
-            #         'offer_avail': 0,
-            #         'card_ref_id': 'N/A',
-            #         'discount_percentage': '0',
-            #         'discount_amount': '0',
-            #         'discount_remarks': '',
-            #         'isTokeizeSuccess': 0,
-            #         'campaign_code': ''
-            #     }
-            # print(request.data['value_a'])
-            # validation_table_serializer = SslcommerzValidationSerializer(
-            #     data=self.ssl_validation_res)
-            # validation_table_serializer.is_valid(raise_exception=True)
-            # validation_table_serializer.save()
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            if request.data.get('val_id', 0) != 0:
+                self.ssl_validation_res = self.SSLCommerz.validate_session(
+                    request.data['val_id'])
+            else:
+                self.ssl_validation_res = {
+                    'status': request.data['status'],
+                    'tran_date': request.data['tran_date'],
+                    'tran_id': request.data['tran_id'],
+                    'val_id': '',
+                    'amount': request.data['amount'],
+                    'store_amount': 0.00,
+                    'currency': request.data['currency'],
+                    'bank_tran_id': request.data['bank_tran_id'],
+                    'card_type': request.data['card_type'],
+                    'card_no': request.data['card_no'],
+                    'card_issuer': request.data['card_issuer'],
+                    'card_brand': request.data['card_brand'],
+                    'card_issuer_country': request.data['card_issuer_country'],
+                    'card_issuer_country_code': request.data['card_issuer_country_code'],
+                    'currency_type': request.data['currency_type'],
+                    'currency_amount': request.data['currency_amount'],
+                    'currency_rate': request.data['currency_rate'],
+                    'base_fair': request.data['base_fair'],
+                    'value_a': request.data['value_a'],
+                    'value_b': request.data['value_b'],
+                    'value_c': request.data['value_c'],
+                    'value_d': request.data['value_d'],
+                    'emi_instalment': '0',
+                    'emi_amount': '0.00',
+                    'emi_description': '',
+                    'emi_issuer': '',
+                    'account_details': '',
+                    'risk_title': 'N/A',
+                    'risk_level': 'N/A',
+                    'APIConnect': '',
+                    'validated_on': None,
+                    'gw_version': '',
+                    'offer_avail': 0,
+                    'card_ref_id': 'N/A',
+                    'discount_percentage': '0',
+                    'discount_amount': '0',
+                    'discount_remarks': '',
+                    'isTokeizeSuccess': 0,
+                    'campaign_code': ''
+                }
+            print(request.data['value_a'])
+            validation_table_serializer = SslcommerzValidationSerializer(
+                data=self.ssl_validation_res)
+            validation_table_serializer.is_valid(raise_exception=True)
+            validation_table_serializer.save()
             # add this value to rdp database
             # self.SSLcAddBalance_obj.add_balance(
             #     request.data['value_a'], request.data['store_amount'])
+            # send request to habib vhai's script
+            url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+            payload = {"transaction_id": request.data['tran_id'],
+                       "customer_id": request.data['value_a'],
+                       "store_amount": request.data['amount'],
+                       "payment_method": 1}
+            headers = {"Content-Type": "application/json"}
+            res = requests.post(url, data=payload, headers=headers)
 
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'authentication',
     'corsheaders',
     'sslcommerz_payment',
+    'bkash_payment'
     # 'test_crud'
     # end of custom installed apps
 ]

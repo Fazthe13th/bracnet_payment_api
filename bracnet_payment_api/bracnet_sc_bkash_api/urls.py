@@ -48,5 +48,6 @@ urlpatterns = [
     # app paths
     path('auth/', include('authentication.urls')),
     path('sslcommerz/', include('sslcommerz_payment.urls')),
+    path('bkash/', include('bkash_payment.urls')),
     # path('expence/', include('test_crud.urls'))
 ]
