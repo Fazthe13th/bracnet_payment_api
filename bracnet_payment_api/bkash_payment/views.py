@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 import requests
+import json
 
 
 class BkashWebhookApiView(GenericAPIView):
@@ -14,6 +15,6 @@ class BkashWebhookApiView(GenericAPIView):
                    "customer_id": 11002,
                    "store_amount": 800,
                    "payment_method": 9}
-        headers = {"Content-Type": "application/json"}
-        res = requests.post(url, data=payload, headers=headers)
+        headers = {"Content-Type": "application/json; charset=utf-8"}
+        res = requests.post(url, data=json.dumps(payload), headers=headers)
         return Response(res)
