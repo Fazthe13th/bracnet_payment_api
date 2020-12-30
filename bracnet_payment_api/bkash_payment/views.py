@@ -17,14 +17,5 @@ class BkashWebhookApiView(GenericAPIView):
                    "payment_method": 9}
         headers = {"Content-Type": "application/json; charset=utf-8"}
         res = requests.post(url, data=json.dumps(payload), headers=headers)
-        # opening a file in 'w'
-        file = open('sample.txt', 'w')
-        # write() - it used to write direct text to the file
-        # writelines() - it used to write multiple lines or strings at a time, it takes ite
-
-        # writing data using the write() method
-        file.write(request.data)
-        # closing the file
-        file.close()
         print(request.data)
         return Response(request.data)
