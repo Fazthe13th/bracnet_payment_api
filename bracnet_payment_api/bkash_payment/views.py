@@ -17,5 +17,5 @@ class BkashWebhookApiView(GenericAPIView):
                    "payment_method": 9}
         headers = {"Content-Type": "application/json; charset=utf-8"}
         res = requests.post(url, data=json.dumps(payload), headers=headers)
-        print(request.data)
-        return Response(res)
+
+        return Response(request.data)
