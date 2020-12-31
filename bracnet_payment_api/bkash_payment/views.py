@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 import requests
 import json
+from django.http import HttpResponse
 
 
 class BkashWebhookApiView(GenericAPIView):
@@ -17,6 +18,7 @@ class BkashWebhookApiView(GenericAPIView):
                    "payment_method": 9}
         headers = {"Content-Type": "application/json; charset=utf-8"}
         res = requests.post(url, data=json.dumps(payload), headers=headers)
-        python_obj = json.loads(request.data)
-        print(python_obj)
-        return Response(request.data)
+        response = HttpResponse(request, content_type="text/plain")
+
+        print(response)
+        return Response(response)

@@ -151,12 +151,12 @@ class SSLCommerzIPNView(GenericAPIView):
                    "payment_method": 9}
         headers = {"Content-Type": "application/json; charset=utf-8"}
         res = requests.post(url, data=json.dumps(payload), headers=headers)
-        try:
-            pass
+        # try:
+        #     pass
 
-            return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
-        except Exception:
-            return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        #     return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
+        # except Exception:
+        #     return Response({'msg': 'SSLCommarz validation failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class SSLCommerzValidatedList(ListAPIView):
