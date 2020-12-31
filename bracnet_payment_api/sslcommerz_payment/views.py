@@ -31,11 +31,11 @@ class SslcommerzPaymentInitializationView(ListCreateAPIView):
                 'total_amount': self.request.data['total_amount'],
                 'currency': self.request.data['currency'],
                 'success_url': self.request.data['success_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+                    sslc_tran_uuid) + '&total_amount=' + str(self.request.data['total_amount']),
                 'fail_url': self.request.data['fail_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+                    sslc_tran_uuid) + '&total_amount=' + str(self.request.data['total_amount']),
                 'cancel_url': self.request.data['cancel_url'] + '?tran_id=' + str(
-                    sslc_tran_uuid) + '&?total_amount=' + str(self.request.data['total_amount']),
+                    sslc_tran_uuid) + '&total_amount=' + str(self.request.data['total_amount']),
                 'emi_option': self.request.data['emi_option'],
                 'cus_name': self.request.data['cus_name'],
                 'cus_email': self.request.data['cus_email'],
