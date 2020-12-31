@@ -36,13 +36,14 @@ class SslcommerzIPNSerializer(serializers.Serializer):
     card_no = serializers.CharField(
         max_length=16,   required=False, allow_blank=True)
     bank_tran_id = serializers.CharField(max_length=255)
-    status = serializers.ChoiceField(choices=STATUS_CHOICES)
+    status = serializers.CharField(
+        max_length=255,   required=False, allow_blank=True)
     tran_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     currency = serializers.CharField(min_length=3)
     card_issuer = serializers.CharField(
         max_length=50,   required=False, allow_blank=True)
-    card_brand = serializers.ChoiceField(
-        choices=CARD_BRAND_CHOICES,   required=False, allow_blank=True)
+    card_brand = serializers.CharField(
+        max_length=255,   required=False, allow_blank=True)
     card_issuer_country = serializers.CharField(
         max_length=50,   required=False, allow_blank=True)
     card_issuer_country_code = serializers.CharField(
