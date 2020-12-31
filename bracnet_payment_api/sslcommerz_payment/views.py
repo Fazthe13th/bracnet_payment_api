@@ -87,6 +87,7 @@ class SSLCommerzIPNView(GenericAPIView):
     # SSLcAddBalance_obj = SSLcAddBalance()
 
     def post(self, request):
+        print(request.data)
         try:
             serializer = self.serializer_class(data=request.data)
             serializer.is_valid(raise_exception=True)
