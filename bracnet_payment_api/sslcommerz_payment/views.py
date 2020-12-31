@@ -151,6 +151,7 @@ class SSLCommerzIPNView(GenericAPIView):
                    "payment_method": 9}
         headers = {"Content-Type": "application/json; charset=utf-8"}
         res = requests.post(url, data=json.dumps(payload), headers=headers)
+        return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         # try:
         #     pass
 
