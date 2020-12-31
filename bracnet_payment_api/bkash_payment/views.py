@@ -34,6 +34,6 @@ class BkashWebhookApiView(GenericAPIView):
         # headers = {"Content-Type": "application/json; charset=utf-8"}
         # res = requests.post(url, data=json.dumps(payload), headers=headers)
         # response = HttpResponse(request, content_type="text/plain")
-
-        print(request.data)
-        return Response(request.data)
+        plain_text = request.data.decode('utf-8')
+        print(plain_text)
+        return Response(plain_text)
