@@ -55,5 +55,5 @@ class BkashWebhookApiView(GenericAPIView):
         plain_text_split = "{" + plain_text_split[1]
         serializer = self.serializer_class(data=json.loads(plain_text_split))
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(onbording_res=json.loads(plain_text_split))
         return Response(json.loads(plain_text_split))
