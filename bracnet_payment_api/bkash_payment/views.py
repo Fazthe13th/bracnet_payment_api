@@ -12,9 +12,9 @@ class PlainTextParser(BaseParser):
     """
     Plain text parser.
     """
-    media_type = 'text/plain'
+    media_type = "text/plain; charset=utf-8"
 
-    def parse(self, stream, media_type=None, parser_context=None):
+    def parse(self, stream, media_type="text/plain; charset=utf-8", parser_context=None):
         """
         Simply return a string representing the body of the request.
         """
@@ -34,6 +34,6 @@ class BkashWebhookApiView(GenericAPIView):
         # headers = {"Content-Type": "application/json; charset=utf-8"}
         # res = requests.post(url, data=json.dumps(payload), headers=headers)
         # response = HttpResponse(request, content_type="text/plain")
-        plain_text = request.data.decode('utf-8')
+        plain_text = request.data
         print(plain_text)
         return Response(plain_text)
