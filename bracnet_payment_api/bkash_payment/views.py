@@ -9,16 +9,28 @@ from rest_framework.parsers import BaseParser
 
 
 class PlainTextParser(BaseParser):
-    """
-    Plain text parser.
-    """
-    media_type = "text/plain; charset=utf-8"
+    """Custom plain text parser to extract 'text/plain' payloads from requests."""
 
-    def parse(self, stream, media_type="text/plain; charset=utf-8", parser_context=None):
+    media_type = 'text/plain'
+    format = 'text'
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        """Simply returns a string representing the body of the request.
+
+        Args:
+            stream (bytes): A stream-like object representing the body of the request.
+            media_type (str): Default 'Content-type' of the request.
+            parser_context(dict): Dictionary containing any additional context that is required to parse the content.
+
+        Returns:
+            `data`: will simply be a string representing the body of the request.
+            `files`: will always be `None`.
         """
-        Simply return a string representing the body of the request.
-        """
-        return stream.read()
+        try:
+            return stream.read()
+        except ValueError as error:
+            raise exceptions.ValidationError(
+                'Text-plain parse error - %s' % error)
 
 
 class BkashWebhookApiView(GenericAPIView):
