@@ -93,6 +93,16 @@ class SSLCommerzIPNView(GenericAPIView):
             if request.data.get('val_id', 0) != 0:
                 self.ssl_validation_res = self.SSLCommerz.validate_session(
                     request.data['val_id'])
+                if self.ssl_validation_res['status'] == 'VALID':
+                    url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+                    payload = {"transaction_id": request.data['tran_id'],
+                               "customer_id": request.data['value_a'],
+                               "store_amount": request.data['amount'],
+                               "payment_method": 9}
+                    headers = {
+                        "Content-Type": "application/json; charset=utf-8"}
+                    res = requests.post(
+                        url, data=json.dumps(payload), headers=headers)
             else:
                 self.ssl_validation_res = {
                     'status': request.data['status'],
@@ -135,6 +145,7 @@ class SSLCommerzIPNView(GenericAPIView):
                     'isTokeizeSuccess': 0,
                     'campaign_code': ''
                 }
+
             print(request.data['value_a'])
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
@@ -144,13 +155,6 @@ class SSLCommerzIPNView(GenericAPIView):
             # self.SSLcAddBalance_obj.add_balance(
             #     request.data['value_a'], request.data['store_amount'])
             # send request to habib vhai's script
-            url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
-            payload = {"transaction_id": request.data['tran_id'],
-                       "customer_id": request.data['value_a'],
-                       "store_amount": request.data['amount'],
-                       "payment_method": 9}
-            headers = {"Content-Type": "application/json; charset=utf-8"}
-            res = requests.post(url, data=json.dumps(payload), headers=headers)
 
             return Response({'msg': 'Payment IPN received and Validated'}, status=status.HTTP_201_CREATED)
         except Exception:
