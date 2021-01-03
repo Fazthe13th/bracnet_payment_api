@@ -49,5 +49,5 @@ class BkashWebhookApiView(GenericAPIView):
         plain_text = request.data
         plain_text_split = str(plain_text).split('{')
         final_json = json.dumps(plain_text_split[1])
-        print(json.decoder(final_json))
-        return Response(json.decoder(final_json))
+        print(json.loads(final_json))
+        return Response(json.loads(final_json))
