@@ -26,11 +26,12 @@ class PlainTextParser(BaseParser):
             `data`: will simply be a string representing the body of the request.
             `files`: will always be `None`.
         """
-        try:
-            return stream.read()
-        except ValueError as error:
-            raise exceptions.ValidationError(
-                'Text-plain parse error - %s' % error)
+        return stream.read()
+        # try:
+
+        # except ValueError as error:
+        #     raise exceptions.ValidationError(
+        #         'Text-plain parse error - %s' % error)
 
 
 class BkashWebhookApiView(GenericAPIView):
@@ -48,6 +49,8 @@ class BkashWebhookApiView(GenericAPIView):
         # response = HttpResponse(request, content_type="text/plain")
         plain_text = request.data
         plain_text_split = str(plain_text).split('{')
-        final_json = json.dumps(plain_text_split[1])
+        plain_text_split = plain_text_split[1].replace('\r', '\\r')
+        plain_text_split = plain_text_split.replace('\n', '\\n')
+        final_json = json.dumps(plain_text_split)
         print(json.loads(final_json))
         return Response(json.loads(final_json))
