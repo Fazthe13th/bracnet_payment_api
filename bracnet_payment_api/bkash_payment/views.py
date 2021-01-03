@@ -56,5 +56,5 @@ class BkashWebhookApiView(GenericAPIView):
         data_dict = {"onbording_res": json.loads(plain_text_split)}
         serializer = self.serializer_class(data=data_dict)
         serializer.is_valid(raise_exception=True)
-        serializer.save(onbording_res=data_dict)
+        serializer.save()
         return Response(json.loads(plain_text_split))
