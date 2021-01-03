@@ -6,6 +6,7 @@ import requests
 import json
 from django.http import HttpResponse
 from rest_framework.parsers import BaseParser
+from .serializers import bkashOnboardingSerializer
 
 
 class PlainTextParser(BaseParser):
@@ -37,6 +38,7 @@ class PlainTextParser(BaseParser):
 class BkashWebhookApiView(GenericAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
     parser_classes = [PlainTextParser]
+    serializer_class = bkashOnboardingSerializer
 
     def post(self, request):
         # url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
@@ -51,8 +53,7 @@ class BkashWebhookApiView(GenericAPIView):
 
         plain_text_split = str(plain_text).split('{')
         plain_text_split = "{" + plain_text_split[1]
-        print(plain_text_split)
-
-        final_json = json.dumps(plain_text_split[1])
-        print(json.loads(plain_text_split))
+        serializer = self.serializer_class(data=json.loads(plain_text_split))
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(json.loads(plain_text_split))
