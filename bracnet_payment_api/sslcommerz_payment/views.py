@@ -103,6 +103,7 @@ class SSLCommerzIPNView(GenericAPIView):
                         "Content-Type": "application/json; charset=utf-8"}
                     res = requests.post(
                         url, data=json.dumps(payload), headers=headers)
+                    print("Habib vhai ke pathaisi")
             else:
                 self.ssl_validation_res = {
                     'status': request.data['status'],
