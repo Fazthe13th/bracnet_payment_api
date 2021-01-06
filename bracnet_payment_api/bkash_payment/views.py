@@ -35,9 +35,31 @@ class PlainTextParser(BaseParser):
         #         'Text-plain parse error - %s' % error)
 
 
+# class BkashWebhookApiView(GenericAPIView):
+#     # permission_classes = (permissions.IsAuthenticated,)
+#     parser_classes = [PlainTextParser]
+#     serializer_class = bkashOnboardingSerializer
+
+#     def post(self, request):
+#         # url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+#         # payload = {"transaction_id": "798b97e6-1232-4e4f-8422-c97befc6357d",
+#         #            "customer_id": 11002,
+#         #            "store_amount": 800,
+#         #            "payment_method": 9}
+#         # headers = {"Content-Type": "application/json; charset=utf-8"}
+#         # res = requests.post(url, data=json.dumps(payload), headers=headers)
+#         # response = HttpResponse(request, content_type="text/plain")
+#         plain_text = request.data.decode('utf-8')
+
+#         plain_text_split = str(plain_text).split('{')
+#         plain_text_split = "{" + plain_text_split[1]
+#         data_dict = {"onbording_res": json.loads(plain_text_split)}
+#         serializer = self.serializer_class(data=data_dict)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(json.loads(plain_text_split))
 class BkashWebhookApiView(GenericAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
-    parser_classes = [PlainTextParser]
     serializer_class = bkashOnboardingSerializer
 
     def post(self, request):
@@ -49,12 +71,10 @@ class BkashWebhookApiView(GenericAPIView):
         # headers = {"Content-Type": "application/json; charset=utf-8"}
         # res = requests.post(url, data=json.dumps(payload), headers=headers)
         # response = HttpResponse(request, content_type="text/plain")
-        plain_text = request.data.decode('utf-8')
+        plain_text = request.data
 
-        plain_text_split = str(plain_text).split('{')
-        plain_text_split = "{" + plain_text_split[1]
-        data_dict = {"onbording_res": json.loads(plain_text_split)}
+        data_dict = {"onbording_res": plain_text}
         serializer = self.serializer_class(data=data_dict)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(json.loads(plain_text_split))
+        return Response(plain_text)
