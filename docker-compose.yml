@@ -16,10 +16,15 @@ services:
       - DB_NAME=bracnet_payment_api
       - DB_USER=faz13
       - DB_PASS=faz13
-  #   depends_on: 
-  #     - db
-  # db:
-  #   image: mariadb:10.5.8
+    depends_on: 
+      - db
+  db:
+    image: mariadb:10.5.8
+    networks:
+            - hostnetwork
+networks:
+    hostnetwork:
+        external: true
   #   environment:
   #     MYSQL_ROOT_PASSWORD: root@123
   #     MYSQL_DATABASE: bracnet_payment_api
