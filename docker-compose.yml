@@ -15,25 +15,18 @@ services:
              python manage.py runserver 0.0.0.0:8000"
     environment: 
       - DB_HOST=db
-      - DB_NAME=bracnet_payment
-      - DB_USER=payment_bracnet
-      - DB_PASS=Bracnet321#
+      - DB_NAME=bracnet_payment_api
+      - DB_USER=faz13
+      - DB_PASS=faz13
     depends_on: 
       - db
   db:
     image: mariadb:10.5.8
     environment:
-      - MYSQL_HOST=localhost
-      - MYSQL_PORT=3306  # cannot change this port to other number
-      - MYSQL_ROOT_HOST=%
-      - MYSQL_DATABASE=bracnet_payment
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=Bracnet321#
-      - MYSQL_ROOT_PASSWORD=Bracnet321#
-      # MYSQL_ROOT_PASSWORD: root@123
-      # MYSQL_DATABASE: bracnet_payment_api
-      # MYSQL_USER: faz13
-      # MYSQL_PASSWORD: faz13
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: bracnet_payment_api
+      MYSQL_USER: faz13
+      MYSQL_PASSWORD: faz13
     volumes: 
       # - ./db/data:/var/lib/mysql
       - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
