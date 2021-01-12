@@ -5,7 +5,7 @@ services:
     build:
       context: .
     ports: 
-      - "443:8000"
+      - "80:8000"
     volumes: 
       - ./bracnet_payment_api:/bracnet_payment_api
     command: >
@@ -16,18 +16,18 @@ services:
       - DB_NAME=bracnet_payment_api
       - DB_USER=faz13
       - DB_PASS=faz13
-    depends_on: 
-      - db
-  db:
-    image: mariadb:10.5.8
-    environment:
-      MYSQL_ROOT_PASSWORD: root@123
-      MYSQL_DATABASE: bracnet_payment_api
-      MYSQL_USER: faz13
-      MYSQL_PASSWORD: faz13
-    volumes: 
-      # - ./db/data:/var/lib/mysql
-      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
+  #   depends_on: 
+  #     - db
+  # db:
+  #   image: mariadb:10.5.8
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root@123
+  #     MYSQL_DATABASE: bracnet_payment_api
+  #     MYSQL_USER: faz13
+  #     MYSQL_PASSWORD: faz13
+  #   volumes: 
+  #     # - ./db/data:/var/lib/mysql
+  #     - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
     
     # volumes: 
     #     - ./init:/docker-entrypoint-initdb.d
