@@ -117,7 +117,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
+        'HOST': '202.168.232.8',
         'NAME': 'bracnet_payment',
         'USER': 'root',
         'PASSWORD': 'Bracnet321#'
