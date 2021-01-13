@@ -4,7 +4,7 @@ LABEL "Auther"="Fazlul Haque"
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirments.txt /requirments.txt
-RUN apk add --update --no-cache mariadb-client mariadb-connector-c
+RUN apk add --update --no-cache mariadb-client mariadb-connector-c musl-dev
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
     gcc libc-dev mariadb-dev
 RUN apk add sudo
