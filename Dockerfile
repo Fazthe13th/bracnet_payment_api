@@ -4,12 +4,12 @@ LABEL "Auther"="Fazlul Haque"
 ENV PYTHONUNBUFFERED 1
 
 COPY ./requirments.txt /requirments.txt
-RUN apk add --update --no-cache mariadb-client mariadb-connector-c musl-dev
-RUN apk add --update --no-cache --virtual .tmp-build-deps \
-    gcc libc-dev mariadb-dev
+RUN apk add --update --no-cache mariadb-client mariadb-connector-c linux-headers
+RUN apk add --update --no-cache gcc libc-dev mariadb-dev
+
 RUN apk add sudo
 RUN pip install -r /requirments.txt
-RUN apk del .tmp-build-deps
+# RUN apk del .tmp-build-deps
 
 RUN mkdir /bracnet_payment_api
 WORKDIR /bracnet_payment_api
