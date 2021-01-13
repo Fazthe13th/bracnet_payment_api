@@ -26,4 +26,4 @@ RUN chown -R faz13:faz13 /vol
 RUN chmod -R 755 /vol/web
 USER faz13
 
-CMD ["entrypoint.sh"]
+CMD ["/scripts/entrypoint.sh"]
