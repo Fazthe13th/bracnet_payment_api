@@ -17,6 +17,8 @@ services:
       - DB_PASS=faz13
     expose:
       - 8000
+    networks:
+      - proxy
     depends_on: 
       - db
   db:
@@ -70,6 +72,8 @@ services:
       - html:/usr/share/nginx/html
       - vhost:/etc/nginx/vhost.d
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - proxy
     depends_on:
       - app
   nginx-proxy-letsencrypt:
