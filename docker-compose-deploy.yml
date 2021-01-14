@@ -103,4 +103,7 @@ volumes:
   html:
   media_volume:
   vhost:
+networks:
+  external: true
+  name: proxy
   
