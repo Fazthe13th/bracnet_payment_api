@@ -21,9 +21,9 @@ RUN chmod +x /scripts/*
 RUN mkdir -p /vol/web/media
 RUN mkdir -p /vol/web
 
-RUN adduser -D faz13
-RUN chown -R faz13:faz13 /vol
-RUN chmod -R 755 /vol/web
-USER faz13
+# RUN adduser -D faz13
+# RUN chown -R faz13:faz13 /vol
+# RUN chmod -R 755 /vol/web
+# USER faz13
 
 # CMD ["/scripts/entrypoint.sh"]
