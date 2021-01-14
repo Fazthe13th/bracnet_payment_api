@@ -1,5 +1,11 @@
 #!/bin/sh
 
-set -e
-python manage.py collectstatic --noinput
-uwsgi --socket :443 --master --enable-threads --module bracnet_sc_bkash_api.wsgi
+until ./manage.py migrate
+do
+    echo "Waiting for db to be ready..."
+    sleep 2
+done
+
+./manage.py collectstatic --noinput
+
+gunicorn server.wsgi --bind 0.0.0.0:8000 --workers 4 --threads 4

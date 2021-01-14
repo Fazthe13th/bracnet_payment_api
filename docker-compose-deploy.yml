@@ -1,108 +1,49 @@
 version: '3'
 
-services: 
-  app:
-    build: 
-      context: .
-    command: gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000
-    volumes:
-      - static_volume:/vol/web/static
-      - media_volume:/vol/web/media
-    environment:
-      - SECRET_KEY=sampleSecretKey
-      - ALLOWED_HOSTS=127.0.0.1,localhost,payment.bracnet.net,202.168.232.8
-      - DB_HOST=db
-      - DB_NAME=bracnet_payment_api
-      - DB_USER=faz13
-      - DB_PASS=faz13
-    expose:
-      - 8000
-    networks:
-      - proxy
-    depends_on: 
+services:
+    nginx: 
+        restart: always
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - static_volume:/django_static
+            - ./docker/nginx/production:/etc/nginx/conf.d
+            - ./docker/nginx/certbot/conf:/etc/letsencrypt
+            - ./docker/nginx/certbot/www:/var/www/certbot
+        depends_on: 
+            - app
+    certbot:
+        image: certbot/certbot
+        restart: always
+        volumes:
+            - ./docker/nginx/certbot/conf:/etc/letsencrypt
+            - ./docker/nginx/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"       
+    app:
+        restart: always
+        build:
+            context: .
+        entrypoint: /scripts/entrypoint.sh
+        volumes:
+            - static_volume:/django_static
+        expose:
+            - 8000
+        depends_on: 
       - db
-  db:
-    image: mariadb:10.5.8
-    environment:
-      MYSQL_ROOT_PASSWORD: root@123
-      MYSQL_DATABASE: bracnet_payment_api
-      MYSQL_USER: faz13
-      MYSQL_PASSWORD: faz13
-    volumes: 
-      # - ./db/data:/var/lib/mysql
-      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
-  
-  # jwildernginxproxy:
-  #   image: jwilder/nginx-proxy
-  #   container_name: jwildernginxproxy
-  #   labels:
-  #     com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - certs:/etc/nginx/certs:ro
-  #     - vhostd:/etc/nginx/vhost.d
-  #     - html:/usr/share/nginx/html
-  #     - /var/run/docker.sock:/tmp/docker.sock:ro
-  #   restart: always
-  # letsencrypt-nginx-proxy-companion:
-  #   image: jrcs/letsencrypt-nginx-proxy-companion
-  #   container_name: letsencrypt-nginx-proxy-companion
-  #   environment:
-  #     - DEFAULT_EMAIL=fazlul.haque@bracmail.net
-  #     - NGINX_PROXY_CONTAINER=nginx-proxy
-  #   volumes:
-  #     - certs:/etc/nginx/certs
-  #     - vhostd:/etc/nginx/vhost.d
-  #     - html:/usr/share/nginx/html
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #   restart: always
-  nginx-proxy:
-    container_name: nginx-proxy
-    image: jwilder/nginx-proxy
-    restart: always
-    ports:
-      - 443:443
-      - 80:80
-    volumes:
-      - static_volume:/static/static
-      - media_volume:/static/media
-      - certs:/etc/nginx/certs
-      - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - proxy
-    depends_on:
-      - app
-  nginx-proxy-letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    environment:
-      - DEFAULT_EMAIL=fazlul.haque@bracmail.net
-      - NGINX_PROXY_CONTAINER=nginx-proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - certs:/etc/nginx/certs
-      - html:/usr/share/nginx/html
-      - vhost:/etc/nginx/vhost.d
-    depends_on:
-      - nginx-proxy
-  # proxy:
-  #   build:
-  #     context: ./proxy
-  #   volumes: 
-  #     - static_data:/vol/static
-  #   ports: 
-  #     - "8080:8080"
-  #   depends_on: 
-  #     - app
-volumes: 
-  static_volume:
-  certs:
-  html:
-  media_volume:
-  vhost:
-networks:
-  proxy:
-    external: true
+    db:
+        image: mariadb:10.5.8
+        environment:
+            MYSQL_ROOT_PASSWORD: root@123
+            MYSQL_DATABASE: bracnet_payment_api
+            MYSQL_USER: faz13
+            MYSQL_PASSWORD: faz13
+        volumes: 
+            # - ./db/data:/var/lib/mysql
+            - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql      
+
+volumes:
+    static_volume: 
