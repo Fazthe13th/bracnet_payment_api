@@ -74,7 +74,7 @@ services:
       - app
   nginx-proxy-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
-    env_file:
+    environment:
       - DEFAULT_EMAIL=fazlul.haque@bracmail.net
       - NGINX_PROXY_CONTAINER=nginx-proxy
     volumes:
