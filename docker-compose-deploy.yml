@@ -47,23 +47,24 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "/etc/nginx/conf.d"
-      - "/etc/nginx/vhost.d"
-      - "/usr/share/nginx/html"
-      - "./volumes/proxy/certs:/etc/nginx/certs"
+      - certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     labels:
-      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
 
   letsencrypt-companion: # <-- NEW SECTION
     restart: always
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: payment_letsencrypt-companion-container
-    volumes_from:
-      - nginx-proxy
+    environment:
+      - NGINX_PROXY_CONTAINER=payment_nginx-proxy
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./volumes/proxy/certs:/etc/nginx/certs:rw"
+      - certs:/etc/nginx/certs
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   # proxy:
   #   build:
   #     context: ./proxy
@@ -74,4 +75,7 @@ services:
   #   depends_on: 
   #     - app
 volumes: 
- static_data:
+  static_data:
+  certs:
+  html:
+  vhostd:
