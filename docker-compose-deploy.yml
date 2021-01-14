@@ -26,23 +26,11 @@ services:
       # - ./db/data:/var/lib/mysql
       - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
   
-  nginx:
-    image: nginx:latest
-    container_name: myproject_nginx-container
-    volumes:
-      - ./proxy:/etc/nginx/conf.d
-      - static_data:/vol/static
-    depends_on:
-      - nginx-proxy # <-- NEW SECTION
-      - app
-    environment: # <-- NEW SECTION
-      - VIRTUAL_HOST=payment.bracnet.net
-      - LETSENCRYPT_HOST=payment.bracnet.net
-      - LETSENCRYPT_EMAIL=fazlul.haque@bracmail.net
-
-  nginx-proxy: # <-- NEW SECTION
+  jwildernginxproxy:
     image: jwilder/nginx-proxy
-    container_name: payment_nginx-proxy
+    container_name: jwildernginxproxy
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
     ports:
       - "80:80"
       - "443:443"
@@ -51,20 +39,18 @@ services:
       - vhostd:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-
-  letsencrypt-companion: # <-- NEW SECTION
     restart: always
+  letsencrypt-nginx-proxy-companion:
     image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: payment_letsencrypt-companion-container
+    container_name: letsencrypt-nginx-proxy-companion
     environment:
-      - NGINX_PROXY_CONTAINER=payment_nginx-proxy
+      - NGINX_PROXY_CONTAINER=jwildernginxproxy
     volumes:
       - certs:/etc/nginx/certs
       - vhostd:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: always
   # proxy:
   #   build:
   #     context: ./proxy
