@@ -1,26 +1,44 @@
-version: "3"
+version: '3'
 
 services:
-  app:
+  nginx:
+    container_name: nginx 
+    restart: always
     build:
       context: .
-    ports: 
-      - "80:8000"
-    #   - "3306"
-    # network_mode: "bridge"
-    volumes: 
-      - ./bracnet_payment_api:/bracnet_payment_api
-    command: >
-      sh -c "python manage.py migrate && 
-             python manage.py runserver 0.0.0.0:8000"
-    environment: 
-      - DB_HOST=db
-      - DB_NAME=bracnet_payment_api
-      - DB_USER=faz13
-      - DB_PASS=faz13
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - static_volume:/django_static
+      - ./docker/nginx/production:/etc/nginx/conf.d
+      - ./docker/nginx/certbot/conf:/etc/letsencrypt
+      - ./docker/nginx/certbot/www:/var/www/certbot
+    depends_on: 
+      - app
+  certbot:
+    container_name: certbot
+    image: certbot/certbot
+    restart: always
+    volumes:
+      - ./docker/nginx/certbot/conf:/etc/letsencrypt
+      - ./docker/nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"       
+  app:
+    container_name: payment_api
+    restart: always
+    build:
+      context: .
+    entrypoint: /scripts/entrypoint.sh
+    volumes:
+      - static_volume:/django_static
+    expose:
+      - 8000
     depends_on: 
       - db
   db:
+    container_name: mariadb_database
     image: mariadb:10.5.8
     environment:
       MYSQL_ROOT_PASSWORD: root@123
@@ -29,14 +47,7 @@ services:
       MYSQL_PASSWORD: faz13
     volumes: 
       # - ./db/data:/var/lib/mysql
-      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
+      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql      
 
-    
-    # volumes: 
-    #     - ./init:/docker-entrypoint-initdb.d
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
-
+volumes:
+    static_volume: 

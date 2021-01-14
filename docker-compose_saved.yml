@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+    ports: 
+      - "80:8000"
+    #   - "3306"
+    # network_mode: "bridge"
+    volumes: 
+      - ./bracnet_payment_api:/bracnet_payment_api
+    command: >
+      sh -c "python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
+    environment: 
+      - DB_HOST=db
+      - DB_NAME=bracnet_payment_api
+      - DB_USER=faz13
+      - DB_PASS=faz13
+    depends_on: 
+      - db
+  db:
+    image: mariadb:10.5.8
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: bracnet_payment_api
+      MYSQL_USER: faz13
+      MYSQL_PASSWORD: faz13
+    volumes: 
+      # - ./db/data:/var/lib/mysql
+      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
+
+    
+    # volumes: 
+    #     - ./init:/docker-entrypoint-initdb.d
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
