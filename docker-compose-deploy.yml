@@ -58,7 +58,6 @@ services:
   #   restart: always
   nginx-proxy:
     container_name: nginx-proxy
-    build: nginx
     image: jwilder/nginx-proxy
     restart: always
     ports:
