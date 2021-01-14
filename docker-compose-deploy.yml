@@ -6,7 +6,7 @@ services:
       context: .
     command: gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_data:/vol/web/static
+      - static_volume:/vol/web/static
       - media_volume:/vol/web/media
     environment:
       - SECRET_KEY=sampleSecretKey
@@ -94,7 +94,7 @@ services:
   #   depends_on: 
   #     - app
 volumes: 
-  static_data:
+  static_volume:
   certs:
   html:
   media_volume:
