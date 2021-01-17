@@ -1,7 +1,7 @@
 http {
     #...
     upstream payment.bracnet.net {
-        server http://172.19.0.3:8000;
+        server payment.bracnet.net:443;
    }
 
     server {
@@ -36,6 +36,8 @@ http {
         }
 
         location / {
+            proxy_read_timeout 300s;
+            proxy_connect_timeout 75s;
             proxy_pass http://payment.bracnet.net;
             uwsgi_pass bracnet_sc_bkash_api:8000;
             include /etc/nginx/uwsgi_params;
