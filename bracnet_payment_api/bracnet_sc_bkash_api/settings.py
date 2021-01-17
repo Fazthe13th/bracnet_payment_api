@@ -184,7 +184,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = '/bracnet_payment_api/static'
 MEDIA_ROOT = '/vol/web/media'
 
 
