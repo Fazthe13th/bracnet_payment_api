@@ -187,7 +187,7 @@ STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '/static/static/'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
 EMAIL_USE_TLS = True
