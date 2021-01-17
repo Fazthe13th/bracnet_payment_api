@@ -33,7 +33,7 @@ services:
       - 443:443
       - 80:80
     volumes:
-      - static_volume:/vol/static
+      - static_volume:/vol/web/static
       - media_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/mediafiles
       - certs:/etc/nginx/certs
       - html:/usr/share/nginx/html

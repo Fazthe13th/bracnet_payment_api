@@ -184,7 +184,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = '/vol/web/static'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_ROOT = '/vol/web/media'
 
 
