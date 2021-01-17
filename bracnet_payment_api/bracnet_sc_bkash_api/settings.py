@@ -180,7 +180,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # MEDIA_URL = '/media/'
 # STATIC_URL = '/django_static/'
 # STATIC_ROOT = BASE_DIR / 'django_static'
-STATIC_URL = '/static/static/'
+STATIC_URL = '/static/bracnet_payment_api/'
 MEDIA_URL = '/static/media/'
 
 STATIC_ROOT = '/vol/web/static'
