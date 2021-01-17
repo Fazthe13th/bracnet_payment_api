@@ -14,12 +14,16 @@ RUN pip install -r /requirments.txt
 RUN mkdir /bracnet_payment_api
 WORKDIR /bracnet_payment_api
 COPY ./bracnet_payment_api /bracnet_payment_api
-COPY ./scripts /scripts
+# COPY ./scripts /scripts
 
-RUN chmod +x /scripts/*
+# RUN chmod +x /scripts/*
 
 RUN mkdir -p /vol/web/media
-RUN mkdir -p /vol/web
+RUN mkdir -p /vol/web/static
+RUN adduser -D user
+RUN chown -R user:user /vol
+RUN chmod -R 755 /vol/web
+USER user
 
 # RUN adduser -D faz13
 # RUN chown -R faz13:faz13 /vol

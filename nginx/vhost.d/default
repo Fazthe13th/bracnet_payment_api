@@ -1,9 +1,10 @@
-location /staticfiles/ {
-  alias /home/faz13/bracnet_payment_api/bracnet_payment_api/staticfiles;
-  add_header Access-Control-Allow-Origin *;
-}
 
 location /mediafiles/ {
   alias /home/faz13/bracnet_payment_api/bracnet_payment_api/mediafiles;
   add_header Access-Control-Allow-Origin *;
 }
+
+location /static {
+        alias /vol/static;
+        add_header Access-Control-Allow-Origin *;
+    }
