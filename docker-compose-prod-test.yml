@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: .
+    command: gunicorn bracnet_sc_bkash_api.wsgi.application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/staticfiles
+      - media_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/mediafiles
+    expose:
+      - 8000
+    env_file:
+      - .env.staging
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.5.8
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
+    env_file:
+      - .env.staging.db
+  nginx-proxy:
+    container_name: nginx-proxy
+    build: nginx
+    restart: always
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - static_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/staticfiles
+      - media_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/mediafiles
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    depends_on:
+      - web
+  nginx-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    env_file:
+      - .env.staging.proxy-companion
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - html:/usr/share/nginx/html
+      - vhost:/etc/nginx/vhost.d
+    depends_on:
+      - nginx-proxy
+
+volumes:
+  mariadb_data:
+  static_volume:
+  media_volume:
+  certs:
+  html:
+  vhost:

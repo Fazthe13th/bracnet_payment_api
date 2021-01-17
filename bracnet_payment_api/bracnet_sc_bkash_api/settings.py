@@ -101,7 +101,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bracnet_sc_bkash_api.wsgi.application'
-
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -113,10 +113,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ.get('DB_HOST'),
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS')
+        'HOST': os.environ.get('SQL_HOST'),
+        'NAME': os.environ.get('SQL_DATABASE'),
+        'USER': os.environ.get('SQL_USER'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD')
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
