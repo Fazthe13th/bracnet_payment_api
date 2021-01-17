@@ -1,7 +1,7 @@
 http {
     #...
     upstream payment.bracnet.net {
-        server payment.bracnet.net:443;
+        server http://172.19.0.3:8000;
    }
 
     server {
