@@ -181,8 +181,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 # MEDIA_URL = '/media/'
 # STATIC_URL = '/django_static/'
 # STATIC_ROOT = BASE_DIR / 'django_static'
-STATIC_URL = '/static/static/'
-MEDIA_URL = '/static/media/'
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'

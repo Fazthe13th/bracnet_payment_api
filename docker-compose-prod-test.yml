@@ -10,8 +10,8 @@ services:
              python manage.py collectstatic --noinpu &&
              gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4"
     volumes:
-      - static_volume:/vol/web
-      - media_volume:/home/faz13/bracnet_payment_api/bracnet_payment_api/mediafiles
+      - static_volume:/vol/web/static
+      - media_volume:/vol/web/media
     expose:
       - 8000
     env_file:
