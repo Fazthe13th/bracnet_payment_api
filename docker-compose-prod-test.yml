@@ -2,6 +2,7 @@ version: '3'
 
 services:
   web:
+    container_name: payment_api
     build:
       context: .
     # command: gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
@@ -20,6 +21,7 @@ services:
       - db
   db:
     image: mariadb:10.5.8
+    container_name: mariadb_database
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./db/test_permission.sql:/docker-entrypoint-initdb.d/test_permission.sql
@@ -42,6 +44,7 @@ services:
     depends_on:
       - web
   nginx-proxy-letsencrypt:
+    container_name: nginx-proxy-letsencrypt
     image: jrcs/letsencrypt-nginx-proxy-companion
     env_file:
       - .env.staging.proxy-companion
