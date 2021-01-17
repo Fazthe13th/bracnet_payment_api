@@ -180,11 +180,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 # MEDIA_URL = '/media/'
 # STATIC_URL = '/django_static/'
 # STATIC_ROOT = BASE_DIR / 'django_static'
-STATIC_URL = '/static/bracnet_payment_api/'
-MEDIA_URL = '/static/media/'
+STATIC_URL = '/'
+# MEDIA_URL = '/static/media/'
 
 STATIC_ROOT = '/vol/web/static'
-MEDIA_ROOT = '/vol/web/media'
+# MEDIA_ROOT = '/vol/web/media'
 
 
 EMAIL_USE_TLS = True
