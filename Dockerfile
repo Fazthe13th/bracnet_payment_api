@@ -30,4 +30,4 @@ USER user
 # RUN chmod -R 755 /vol/web
 # USER faz13
 
-# CMD ["/scripts/entrypoint.sh"]
+CMD ["/scripts/entrypoint.sh"]

@@ -2,4 +2,8 @@ server {
     location /static {
         alias /vol/static;
     }
+    location / {
+        uwsgi_pass bracnet_sc_bkash_api:8000;
+        include /etc/nginx/uwsgi_params;
+    }
 }
