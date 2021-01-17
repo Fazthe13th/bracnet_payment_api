@@ -6,12 +6,12 @@
 #     sleep 2
 # done
 
-# ./manage.py collectstatic --noinput
+./manage.py collectstatic --noinput
 
-# gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
+gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
 
-set -e
+# set -e
 
-python manage.py collectstatic --noinput
+# python manage.py collectstatic --noinput
 
-uwsgi --socket :8000 --master --enable-threads --module bracnet_sc_bkash_api.wsgi
+# uwsgi --socket :8000 --master --enable-threads --module bracnet_sc_bkash_api.wsgi
