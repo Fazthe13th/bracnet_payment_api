@@ -1,6 +1,6 @@
 
 location /static/ {
-        alias /bracnet_payment_api/static;
+        alias /bracnet_payment_api/static/;
         add_header Access-Control-Allow-Origin *;
     }
     
