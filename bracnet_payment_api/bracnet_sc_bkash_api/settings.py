@@ -180,11 +180,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 # MEDIA_URL = '/media/'
 # STATIC_URL = '/django_static/'
 # STATIC_ROOT = BASE_DIR / 'django_static'
-STATIC_URL = '/static'
-MEDIA_URL = '/static'
+STATIC_URL = '/static/'
+MEDIA_URL = '/static/'
 
-STATIC_ROOT = '/vol/web'
-MEDIA_ROOT = '/vol/web'
+STATIC_ROOT = '/vol/web/'
+MEDIA_ROOT = '/vol/web/'
 
 
 EMAIL_USE_TLS = True
