@@ -14,9 +14,9 @@ RUN pip install -r /requirments.txt
 RUN mkdir /bracnet_payment_api
 WORKDIR /bracnet_payment_api
 COPY ./bracnet_payment_api /bracnet_payment_api
-# COPY ./scripts /scripts
+COPY ./scripts /scripts
 
-# RUN chmod +x /scripts/*
+RUN chmod +x /scripts/*
 
 RUN mkdir -p /vol/web/media
 RUN mkdir -p /vol/web/static
@@ -30,4 +30,4 @@ USER user
 # RUN chmod -R 755 /vol/web
 # USER faz13
 
-# CMD ["/scripts/entrypoint.sh"]
+CMD ["/scripts/entrypoint.sh"]
