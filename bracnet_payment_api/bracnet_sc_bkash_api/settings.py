@@ -102,7 +102,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bracnet_sc_bkash_api.wsgi.application'
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -180,11 +181,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 # MEDIA_URL = '/media/'
 # STATIC_URL = '/django_static/'
 # STATIC_ROOT = BASE_DIR / 'django_static'
-STATIC_URL = '/'
-# MEDIA_URL = '/static/media/'
+STATIC_URL = '/static/static/'
+MEDIA_URL = '/static/media/'
 
 STATIC_ROOT = '/vol/web/static'
-# MEDIA_ROOT = '/vol/web/media'
+MEDIA_ROOT = '/vol/web/media'
 
 
 EMAIL_USE_TLS = True
