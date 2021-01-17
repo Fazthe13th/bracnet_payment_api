@@ -15,7 +15,7 @@ server {
     }
 
     location /static/ {
-        alias /vol/web/static;
+        alias /bracnet_payment_api/static;
     }
 
 }
