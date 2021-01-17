@@ -101,7 +101,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bracnet_sc_bkash_api.wsgi.application'
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
