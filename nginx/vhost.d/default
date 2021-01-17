@@ -1,11 +1,9 @@
 
-location /static/ {
-        autoindex on;
-        alias /bracnet_payment_api/static/;
-        add_header Access-Control-Allow-Origin *;
-    }
-    
-
+location /staticfiles/ {
+    autoindex on;
+    alias /bracnet_payment_api/static/;
+    add_header Access-Control-Allow-Origin *;
+}
     
         
         
