@@ -15,3 +15,5 @@ set -e
 python manage.py collectstatic --noinput
 
 uwsgi --socket :8000 --master --enable-threads --module bracnet_sc_bkash_api.wsgi
+
+ACME_CA_URI=https://acme-staging-v02.api.letsencrypt.org/directory
