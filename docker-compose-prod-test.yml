@@ -8,7 +8,7 @@ services:
     # command: gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
     command: >
       sh -c "python manage.py migrate && 
-             python manage.py collectstatic --noinpu &&
+             python manage.py collectstatic --noinput &&
              gunicorn bracnet_sc_bkash_api.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4"
     volumes:
       - static_volume:/bracnet_payment_api/static
