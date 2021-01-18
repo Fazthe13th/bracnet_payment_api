@@ -50,11 +50,6 @@ class BkashWebhookApiView(GenericAPIView):
         # res = requests.post(url, data=json.dumps(payload), headers=headers)
         # response = HttpResponse(request, content_type="text/plain")
         plain_text = request.data.decode('utf-8')
-
-        # plain_text_split = str(plain_text).split('{')
-        # plain_text_split = "{" + plain_text_split[1]
-
-        # print(plain_text_split)
         sep = '{'
         extract_json = plain_text[plain_text.index(sep):]
         data_dict = {"onbording_res": json.loads(extract_json)}
