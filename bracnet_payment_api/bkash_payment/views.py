@@ -56,12 +56,12 @@ class BkashWebhookApiView(GenericAPIView):
 
         # print(plain_text_split)
         sep = '{'
-        json_test = plain_text[plain_text.index(sep):]
-        # data_dict = {"onbording_res": json.loads(plain_text_split)}
-        # serializer = self.serializer_class(data=data_dict)
-        # serializer.is_valid(raise_exception=True)
-        # serializer.save()
-        return Response(json.loads(json_test))
+        extract_json = plain_text[plain_text.index(sep):]
+        data_dict = {"onbording_res": json.loads(extract_json)}
+        serializer = self.serializer_class(data=data_dict)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(json.loads(extract_json))
 # class BkashWebhookApiView(GenericAPIView):
 #     # permission_classes = (permissions.IsAuthenticated,)
 #     parser_classes = [PlainTextParser]
