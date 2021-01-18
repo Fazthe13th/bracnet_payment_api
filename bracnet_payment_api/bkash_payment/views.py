@@ -51,14 +51,19 @@ class BkashWebhookApiView(GenericAPIView):
         # response = HttpResponse(request, content_type="text/plain")
         plain_text = request.data.decode('utf-8')
 
-        plain_text_split = str(plain_text).split('{')
-        plain_text_split = "{" + plain_text_split[1]
-        print(plain_text_split)
-        data_dict = {"onbording_res": json.loads(plain_text_split)}
-        serializer = self.serializer_class(data=data_dict)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(json.loads(plain_text_split))
+        # plain_text_split = str(plain_text).split('{')
+        # plain_text_split = "{" + plain_text_split[1]
+
+        # print(plain_text_split)
+        d = "{"
+        for line in plain_text:
+            s = [e+d for e in line.split(d) if e]
+        print(s)
+        # data_dict = {"onbording_res": json.loads(plain_text_split)}
+        # serializer = self.serializer_class(data=data_dict)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.save()
+        return Response(json.loads(s))
 # class BkashWebhookApiView(GenericAPIView):
 #     # permission_classes = (permissions.IsAuthenticated,)
 #     parser_classes = [PlainTextParser]
