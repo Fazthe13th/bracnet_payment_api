@@ -112,20 +112,21 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': os.environ.get('SQL_HOST'),
-        'NAME': os.environ.get('SQL_DATABASE'),
-        'USER': os.environ.get('SQL_USER'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD')
-    }
     # 'default': {
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'HOST': '202.168.232.8',
-    #     'NAME': 'bracnet_payment',
-    #     'USER': 'root',
-    #     'PASSWORD': 'Bracnet321#'
+    #     'HOST': os.environ.get('SQL_HOST'),
+    #     'NAME': os.environ.get('SQL_DATABASE'),
+    #     'USER': os.environ.get('SQL_USER'),
+    #     'PASSWORD': os.environ.get('SQL_PASSWORD')
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': db,
+        'NAME': os.environ.get('MYSQL_DATABASE'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD')
+    }
+
 }
 
 REST_FRAMEWORK = {
