@@ -10,11 +10,12 @@ class bKash_Onboarding(models.Model):
 
 
 class bKash_payment_payloads(models.Model):
-    transaction_id = models.CharField(db_index=True, unique=True)
+    transaction_id = models.CharField(
+        db_index=True, unique=True, max_length=100)
     transaction_datetime = models.DateTimeField(default=datetime.now)
     payment_from = models.CharField(max_length=20)
     transaction_status = models.CharField(max_length=30)
-    transaction_reference = models.CharField(blank=True)
+    transaction_reference = models.CharField(blank=True, max_length=100)
     amount = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(max_length=3)
     sns_response = models.JSONField()
