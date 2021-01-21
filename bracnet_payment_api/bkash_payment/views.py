@@ -62,7 +62,7 @@ class BkashWebhookApiView(GenericAPIView):
         sep = '{'
         extract_json = plain_text[plain_text.index(sep):]
         converted_json = json.loads(extract_json)
-        if converted_json['Type'] == 'SubscriptionConfirmation' or converted_json['Type'] == 'UnsubscribeConfirmation':
+        if converted_json["Type"] == 'SubscriptionConfirmation' or converted_json['Type'] == 'UnsubscribeConfirmation':
             data_dict = {
                 "onbording_res": converted_json
             }
@@ -70,10 +70,8 @@ class BkashWebhookApiView(GenericAPIView):
                 data=data_dict)
             confirmation_msg.is_valid(raise_exception=True)
             confirmation_msg.save()
-        if converted_json['Type'] == 'Notification':
-            bKash_message = json.loads(str(converted_json['Message']))
-            print(type(bKash_message))
-            print(bKash_message.get('dateTime', None))
+        if converted_json["Type"] == 'Notification':
+            bKash_message = json.loads(str(converted_json["Message"]))
             format_datetime = self.datetime_format(
                 bKash_message.get('dateTime', None))
             data_dict = {
