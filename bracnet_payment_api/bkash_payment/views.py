@@ -71,7 +71,7 @@ class BkashWebhookApiView(GenericAPIView):
             confirmation_msg.is_valid(raise_exception=True)
             confirmation_msg.save()
         if converted_json["Type"] == 'Notification':
-            bKash_message = converted_json["Message"]
+            bKash_message = json.loads(converted_json["Message"])
             print(type(bKash_message))
             format_datetime = self.datetime_format(
                 bKash_message.get('dateTime', None))
