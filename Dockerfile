@@ -17,7 +17,7 @@ COPY ./bracnet_payment_api /bracnet_payment_api
 COPY ./scripts /scripts
 
 RUN chmod +x /scripts/*
-RUN python /bracnet_payment_api/bracnet_sc_bkash_api/manage.py makemigrations
+# RUN python /bracnet_payment_api/bracnet_sc_bkash_api/manage.py makemigrations
 RUN mkdir -p /bracnet_payment_api/static
 RUN mkdir -p /bracnet_payment_api/media
 RUN adduser -D user
