@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.timezone import now
+from datetime import datetime
 # Create your models here.
 
 
@@ -71,7 +71,7 @@ class SslcommerzPaymentValidateModel(models.Model):
     bank_tran_id = models.CharField(max_length=255, null=True, default=None)
     status = models.CharField(
         max_length=100, null=True, default=None)
-    tran_date = models.DateTimeField(default=now())
+    tran_date = models.DateTimeField(default=datetime.now)
     currency = models.CharField(max_length=3, null=True, default=None)
     card_issuer = models.CharField(max_length=50, null=True, default=None)
     card_brand = models.CharField(max_length=50, null=True, default=None)

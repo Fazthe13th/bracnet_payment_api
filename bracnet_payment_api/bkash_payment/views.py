@@ -6,7 +6,8 @@ import requests
 import json
 from django.http import HttpResponse
 from rest_framework.parsers import BaseParser
-from .serializers import bkashOnboardingSerializer
+from .serializers import bkashWebhookSerializer, bkashOnboardingSerializer
+import datetime
 
 
 class PlainTextParser(BaseParser):
@@ -38,7 +39,23 @@ class PlainTextParser(BaseParser):
 class BkashWebhookApiView(GenericAPIView):
     # permission_classes = (permissions.IsAuthenticated,)
     parser_classes = [PlainTextParser]
-    serializer_class = bkashOnboardingSerializer
+    serializer_class = bkashWebhookSerializer
+
+    def datetime_format(self, date_time_str):
+        if date_time_str:
+            year = date_time_str[:4]
+            month = date_time_str[4:6]
+            day = date_time_str[6:8]
+            hour = date_time_str[8:10]
+            minute = date_time_str[10:12]
+            second = date_time_str[12:14]
+            contacted_date = year + "-" + month + "-" + \
+                day + " " + hour + ":" + minute + ":" + second
+            date_time_obj = datetime.datetime.strptime(
+                contacted_date, '%Y-%m-%d %H:%M:%S')
+            return date_time_obj
+        else:
+            return None
 
     def post(self, request):
         # url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
@@ -49,14 +66,54 @@ class BkashWebhookApiView(GenericAPIView):
         # headers = {"Content-Type": "application/json; charset=utf-8"}
         # res = requests.post(url, data=json.dumps(payload), headers=headers)
         # response = HttpResponse(request, content_type="text/plain")
+
         plain_text = request.data.decode('utf-8')
         sep = '{'
         extract_json = plain_text[plain_text.index(sep):]
-        data_dict = {"onbording_res": json.loads(extract_json)}
-        serializer = self.serializer_class(data=data_dict)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(json.loads(extract_json))
+        converted_json = json.loads(extract_json)
+        if converted_json['Type'] == 'SubscriptionConfirmation' or converted_json['Type'] == 'UnsubscribeConfirmation':
+            data_dict = {
+                "onbording_res": converted_json
+            }
+            confirmation_msg = bkashOnboardingSerializer(
+                data=data_dict)
+            confirmation_msg.is_valid(raise_exception=True)
+            confirmation_msg.save()
+        if converted_json['Type'] == 'Notification':
+            bKash_message = json.loads(converted_json['Message'])
+            format_datetime = self.datetime_format(
+                bKash_message.get('dateTime', None))
+            data_dict = {
+                "sns_response": converted_json,
+                "transaction_id": bKash_message.get('trxID', ),
+                "transaction_datetime": format_datetime,
+                "payment_from": bKash_message['debitMSISDN'],
+                "transaction_status": bKash_message['transactionStatus'],
+                "transaction_reference": bKash_message.get('transactionReference', None),
+                "amount": '{:.2f}'.format(bKash_message['amount']),
+                "currency": bKash_message['currency']
+            }
+
+            serializer = self.serializer_class(data=data_dict)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            if data_dict['transaction_reference']:
+                url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+                payload = {"transaction_id": data_dict['transaction_id'],
+                           "customer_id": data_dict['transaction_reference'],
+                           "store_amount": data_dict['amount'],
+                           "payment_method": 7}
+                headers = {"Content-Type": "application/json; charset=utf-8"}
+                requests.post(url, data=json.dumps(payload), headers=headers)
+            # if not data_dict['transaction_reference']:
+            #     url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+            #     payload = {"transaction_id": data_dict['transaction_id'],
+            #                "payment_number": data_dict['payment_from'],
+            #                "store_amount": data_dict['amount'],
+            #                "payment_method": 7}
+            #     headers = {"Content-Type": "application/json; charset=utf-8"}
+            #     requests.post(url, data=json.dumps(payload), headers=headers)
+        return Response(converted_json)
 # class BkashWebhookApiView(GenericAPIView):
 #     # permission_classes = (permissions.IsAuthenticated,)
 #     parser_classes = [PlainTextParser]
