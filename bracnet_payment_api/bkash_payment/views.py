@@ -81,7 +81,7 @@ class BkashWebhookApiView(GenericAPIView):
                 "payment_from": bKash_message['debitMSISDN'],
                 "transaction_status": bKash_message['transactionStatus'],
                 "transaction_reference": bKash_message.get('transactionReference', None),
-                "amount": '{:.2f}'.format(bKash_message['amount']),
+                "amount": "{:.2f}".format(bKash_message['amount']),
                 "currency": bKash_message['currency']
             }
 
