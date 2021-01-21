@@ -22,6 +22,7 @@ RUN mkdir -p /bracnet_payment_api/static
 RUN mkdir -p /bracnet_payment_api/media
 RUN adduser -D user
 RUN chown -R user:user /bracnet_payment_api
+RUN chmod -R 766 /bracnet_payment_api
 RUN chmod -R 755 /bracnet_payment_api/static
 RUN chmod -R 755 /bracnet_payment_api/media
 USER user
