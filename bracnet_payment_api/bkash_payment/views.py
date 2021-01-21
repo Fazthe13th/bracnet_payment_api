@@ -72,7 +72,6 @@ class BkashWebhookApiView(GenericAPIView):
             confirmation_msg.save()
         if converted_json["Type"] == 'Notification':
             bKash_message = json.loads(converted_json['Message'])
-            print(type(bKash_message))
             format_datetime = self.datetime_format(
                 bKash_message.get('dateTime', None))
             data_dict = {
@@ -98,12 +97,14 @@ class BkashWebhookApiView(GenericAPIView):
                            "payment_method": 7}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 requests.post(url, data=json.dumps(payload), headers=headers)
-            # if not data_dict['transaction_reference']:
-            #     url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
-            #     payload = {"transaction_id": data_dict['transaction_id'],"customer_id": None,
-            #                "payment_number": data_dict['payment_from'],
-            #                "store_amount": data_dict['amount'],
-            #                "payment_method": 7}
-            #     headers = {"Content-Type": "application/json; charset=utf-8"}
-            #     requests.post(url, data=json.dumps(payload), headers=headers)
+            if not data_dict['transaction_reference']:
+                url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+                payload = {"transaction_id": data_dict['transaction_id'],
+                           "customer_id": 0,
+                           "payment_number": data_dict['payment_from'],
+                           "store_amount": data_dict['amount'],
+                           "payment_method": 7}
+                headers = {"Content-Type": "application/json; charset=utf-8"}
+                requests.post(url, data=json.dumps(payload), headers=headers)
+
         return Response(converted_json)
