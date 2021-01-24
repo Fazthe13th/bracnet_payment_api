@@ -88,6 +88,7 @@ class BkashWebhookApiView(GenericAPIView):
             serializer = self.serializer_class(data=data_dict)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            print(data_dict['transaction_reference'])
             if data_dict['transaction_reference'] and str(data_dict['transaction_reference']).isdigit():
                 url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
                 payload = {"transaction_id": data_dict['transaction_id'],
