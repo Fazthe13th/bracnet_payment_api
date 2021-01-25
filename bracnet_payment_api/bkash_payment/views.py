@@ -98,8 +98,8 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 # res = requests.post(
                 #     url, data=json.dumps(payload), headers=headers)
-                res = requests.get("https://ptsv2.com/t/012ck-1611559201/post",
-                                   data=json.dumps(payload), headers=headers)
+                res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
+                                    data=json.dumps(payload), headers=headers)
                 print(res)
 
             if not data_dict['transaction_reference']:
@@ -112,8 +112,8 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 # res = requests.post(
                 #     url, data=json.dumps(payload), headers=headers)
-                res = requests.get("https://ptsv2.com/t/012ck-1611559201/post",
-                                   data=json.dumps(payload), headers=headers)
+                res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
+                                    data=json.dumps(payload), headers=headers)
                 print(res)
 
         return Response(converted_json)
