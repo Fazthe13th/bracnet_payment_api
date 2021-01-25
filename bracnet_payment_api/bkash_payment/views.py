@@ -96,8 +96,9 @@ class BkashWebhookApiView(GenericAPIView):
                            "store_amount": data_dict['amount'],
                            "payment_method": 7}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
-                res = requests.post(
-                    url, data=json.dumps(payload), headers=headers)
+                # res = requests.post(
+                #     url, data=json.dumps(payload), headers=headers)
+                res = requests.get("https://www.google.com/")
                 print(res)
 
             if not data_dict['transaction_reference']:
@@ -108,8 +109,9 @@ class BkashWebhookApiView(GenericAPIView):
                            "store_amount": data_dict['amount'],
                            "payment_method": 7}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
-                res = requests.post(
-                    url, data=json.dumps(payload), headers=headers)
+                # res = requests.post(
+                #     url, data=json.dumps(payload), headers=headers)
+                res = requests.get("https://www.google.com/")
                 print(res)
 
         return Response(converted_json)
