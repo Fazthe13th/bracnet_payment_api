@@ -98,7 +98,7 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 res = requests.post(
                     url, data=json.dumps(payload), headers=headers)
-                print(json.dumps(payload))
+                print(res)
 
             if not data_dict['transaction_reference']:
                 url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
@@ -110,6 +110,6 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 res = requests.post(
                     url, data=json.dumps(payload), headers=headers)
-                print(json.dumps(payload))
+                print(res)
 
         return Response(converted_json)
