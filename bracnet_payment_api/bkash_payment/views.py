@@ -98,7 +98,7 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 # res = requests.post(
                 #     url, data=json.dumps(payload), headers=headers)
-                res = requests.get("/t/012ck-1611559201/post",
+                res = requests.get("https://ptsv2.com/t/012ck-1611559201/post",
                                    data=json.dumps(payload), headers=headers)
                 print(res)
 
@@ -112,7 +112,7 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 # res = requests.post(
                 #     url, data=json.dumps(payload), headers=headers)
-                res = requests.get("/t/012ck-1611559201/post",
+                res = requests.get("https://ptsv2.com/t/012ck-1611559201/post",
                                    data=json.dumps(payload), headers=headers)
                 print(res)
 
