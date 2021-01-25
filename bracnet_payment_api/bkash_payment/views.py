@@ -89,31 +89,33 @@ class BkashWebhookApiView(GenericAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             if data_dict['transaction_reference'] and str(data_dict['transaction_reference']).isdigit():
-                url = "http://115.127.200.6:81/rdpBracnet/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+                url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
                 payload = {"transaction_id": data_dict['transaction_id'],
                            "customer_id": data_dict['transaction_reference'],
                            "payment_number": data_dict['payment_from'],
                            "store_amount": data_dict['amount'],
                            "payment_method": 7}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
-                # res = requests.post(
-                #     url, data=json.dumps(payload), headers=headers)
-                res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
-                                    data=json.dumps(payload), headers=headers)
-                print(res)
+                print(json.dumps(payload))
+                res = requests.post(
+                    url, data=json.dumps(payload), headers=headers)
+                # res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
+                #                     data=json.dumps(payload), headers=headers)
+                print(res.text)
 
             if not data_dict['transaction_reference']:
-                url = "http://115.127.200.6:81/rdpBracnet/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
+                url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
                 payload = {"transaction_id": data_dict['transaction_id'],
                            "customer_id": 0,
                            "payment_number": data_dict['payment_from'],
                            "store_amount": data_dict['amount'],
                            "payment_method": 7}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
-                # res = requests.post(
-                #     url, data=json.dumps(payload), headers=headers)
-                res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
-                                    data=json.dumps(payload), headers=headers)
-                print(res)
+                res = requests.post(
+                    url, data=json.dumps(payload), headers=headers)
+                # res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
+                #                     data=json.dumps(payload), headers=headers)
+                print(json.dumps(payload))
+                print(res.text)
 
         return Response(converted_json)
