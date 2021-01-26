@@ -6,8 +6,8 @@ class SSLCommerzfunc():
     """
     Call SSLCOMMERZ api
     """
-    settings = {'store_id': str(os.getenv("STORE_ID")),
-                'store_pass': str(os.getenv("STORE_PASS")), 'issandbox': True}
+    settings = {'store_id': str(os.environ.get("STORE_ID", "bracn5f9fee32c615c")),
+                'store_pass': str(os.environ.get("STORE_PASS", "bracn5f9fee32c615c@ssl")), 'issandbox': True}
     sslcommez = SSLCOMMERZ(settings)
 
     def create_session(self, post_body):
