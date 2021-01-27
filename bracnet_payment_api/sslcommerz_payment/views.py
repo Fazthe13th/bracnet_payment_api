@@ -98,12 +98,11 @@ class SSLCommerzIPNView(GenericAPIView):
                     payload = {"transaction_id": request.data['tran_id'],
                                "customer_id": request.data['value_a'],
                                "store_amount": request.data['amount'],
-                               "payment_method": 9}
+                               "payment_method": "9"}
                     headers = {
                         "Content-Type": "application/json; charset=utf-8"}
                     res = requests.post(
                         url, data=json.dumps(payload), headers=headers)
-                    print("Habib vhai ke pathaisi")
             else:
                 self.ssl_validation_res = {
                     'status': request.data['status'],
@@ -146,8 +145,6 @@ class SSLCommerzIPNView(GenericAPIView):
                     'isTokeizeSuccess': 0,
                     'campaign_code': ''
                 }
-
-            print(request.data['value_a'])
             validation_table_serializer = SslcommerzValidationSerializer(
                 data=self.ssl_validation_res)
             validation_table_serializer.is_valid(raise_exception=True)
