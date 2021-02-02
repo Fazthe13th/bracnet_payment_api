@@ -88,7 +88,7 @@ class BkashWebhookApiView(GenericAPIView):
             serializer = self.serializer_class(data=data_dict)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            if data_dict['transaction_reference'] and str(data_dict['transaction_reference']).isdigit():
+            if data_dict['transaction_reference']:
                 url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
                 payload = {"transaction_id": data_dict['transaction_id'],
                            "customer_id": data_dict['transaction_reference'],
@@ -96,12 +96,8 @@ class BkashWebhookApiView(GenericAPIView):
                            "store_amount": data_dict['amount'],
                            "payment_method": "7"}
                 headers = {"Content-Type": "application/json; charset=utf-8"}
-                print(json.dumps(payload))
                 res = requests.post(
                     url, data=json.dumps(payload), headers=headers)
-                # res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
-                #                     data=json.dumps(payload), headers=headers)
-                print(res.text)
 
             if not data_dict['transaction_reference']:
                 url = "http://rdp.bracnet.net/rdp_client_invoices/rdp_customer_bill_generation_auto.php"
@@ -113,9 +109,5 @@ class BkashWebhookApiView(GenericAPIView):
                 headers = {"Content-Type": "application/json; charset=utf-8"}
                 res = requests.post(
                     url, data=json.dumps(payload), headers=headers)
-                # res = requests.post("https://ptsv2.com/t/012ck-1611559201/post",
-                #                     data=json.dumps(payload), headers=headers)
-                print(json.dumps(payload))
-                print(res.text)
 
         return Response(converted_json)
